@@ -146,29 +146,29 @@ Your Intuitive Plane Number describes your capacity for direct spiritual contact
 
 ### Life Path Numbers
 
-**1** - The Leader: Independent, pioneering, ambitious. Natural born leaders who prefer to go their own way.
+**1** - The Leader: Independent, pioneering, ambitious. Natural born leaders who prefer to go their own way
 
-**2** - The Peacemaker: Cooperative, diplomatic, sensitive. Thrive in partnerships and value harmony above all.
+**2** - The Peacemaker: Cooperative, diplomatic, sensitive. Thrive in partnerships and value harmony above all
 
-**3** - The Creative: Artistic, expressive, optimistic. Natural communicators with creative energy and charm.
+**3** - The Creative: Artistic, expressive, optimistic. Natural communicators with creative energy and charm
 
-**4** - The Builder: Practical, organized, hardworking. Stable and reliable, they build solid foundations.
+**4** - The Builder: Practical, organized, hardworking. Stable and reliable, they build solid foundations
 
-**5** - The Adventurer: Free-spirited, curious, versatile. Crave freedom and new experiences constantly.
+**5** - The Adventurer: Free-spirited, curious, versatile. Crave freedom and new experiences constantly
 
-**6** - The Nurturer: Caring, responsible, family-oriented. Natural healers who put others' needs first.
+**6** - The Nurturer: Caring, responsible, family-oriented. Natural healers who put others' needs first
 
-**7** - The Seeker: Analytical, introspective, spiritual. Deep thinkers who seek truth and understanding.
+**7** - The Seeker: Analytical, introspective, spiritual. Deep thinkers who seek truth and understanding
 
-**8** - The Achiever: Ambitious, business-minded, powerful. Driven to succeed and accumulate material wealth.
+**8** - The Achiever: Ambitious, business-minded, powerful. Driven to succeed and accumulate material wealth
 
-**9** - The Humanitarian: Compassionate, generous, wise. Devoted to serving others and making the world better.
+**9** - The Humanitarian: Compassionate, generous, wise. Devoted to serving others and making the world better
 
-**11** - The Intuitive: Psychic, inspirational, enlightened. Master number with powerful spiritual gifts.
+**11** - The Intuitive: Psychic, inspirational, enlightened. Master number with powerful spiritual gifts
 
-**22** - The Master Builder: Visionary, practical, powerful. Can turn dreams into reality on a large scale.
+**22** - The Master Builder: Visionary, practical, powerful. Can turn dreams into reality on a large scale
 
-**33** - The Master Teacher: Healing, teaching, uplifting. Rare number focused on spiritual service to humanity.
+**33** - The Master Teacher: Healing, teaching, uplifting. Rare number focused on spiritual service to humanity
 
 ### Expression Numbers
 
@@ -238,25 +238,25 @@ Your Intuitive Plane Number describes your capacity for direct spiritual contact
 
 ### Physical Plane Numbers
 
-**1** - Active and inspiring; daring in business; strong opinions; charming and witty but easily bored; goal-oriented and thrives on enthusiasm and challenges.
+**1** - Active and inspiring; daring in business; strong opinions; charming and witty but easily bored; goal-oriented and thrives on enthusiasm and challenges
 
-**2** - Highly sensitive; may suffer from shyness and lack of confidence; persistent but gentle effort; tends to worry; good at gathering detailed information; moves with natural grace once confident.
+**2** - Highly sensitive; may suffer from shyness and lack of confidence; persistent but gentle effort; tends to worry; good at gathering detailed information; moves with natural grace once confident
 
-**3** - Highly attractive with potential for charisma; charming and witty; expresses feelings well but may repress true emotions; artistic, imaginative, and dramatic; dislikes hard work; fun-loving and entertaining.
+**3** - Highly attractive with potential for charisma; charming and witty; expresses feelings well but may repress true emotions; artistic, imaginative, and dramatic; dislikes hard work; fun-loving and entertaining
 
-**4** - Great energy and determination; practical and organized; excellent concentration; tenacious when facing obstacles; loyal, honest, warm, and generous; dislikes changes; appreciates traditions.
+**4** - Great energy and determination; practical and organized; excellent concentration; tenacious when facing obstacles; loyal, honest, warm, and generous; dislikes changes; appreciates traditions
 
-**5** - Strong constitution; versatile and resourceful; flexible body and quick reactions; enjoys change, travel, and new people; attracted to new and exciting experiences; excellent salesman.
+**5** - Strong constitution; versatile and resourceful; flexible body and quick reactions; enjoys change, travel, and new people; attracted to new and exciting experiences; excellent salesman
 
-**6** - Combines practicality and artistry; natural teacher and healer; appreciates beauty; excellent marriage partner; loving and emotional; curious about others; idealistic and imaginative.
+**6** - Combines practicality and artistry; natural teacher and healer; appreciates beauty; excellent marriage partner; loving and emotional; curious about others; idealistic and imaginative
 
-**7** - Must consciously maintain physical health; body is a major source of education; talent as a healer; fine intuition; understands abstract thoughts; performs best in quiet places; perfectionist.
+**7** - Must consciously maintain physical health; body is a major source of education; talent as a healer; fine intuition; understands abstract thoughts; performs best in quiet places; perfectionist
 
-**8** - Highly ambitious with leadership and management talent; competitive; strong sense of justice; likely strong constitution; vision and direction; money and power are integral; conscious of status.
+**8** - Highly ambitious with leadership and management talent; competitive; strong sense of justice; likely strong constitution; vision and direction; money and power are integral; conscious of status
 
-**9** - Strong presence; charismatic with dramatic flair; drawn to public careers; humanitarian; highly idealistic; not particularly practical; may be considered aloof; potential for fame.
+**9** - Strong presence; charismatic with dramatic flair; drawn to public careers; humanitarian; highly idealistic; not particularly practical; may be considered aloof; potential for fame
 
-**11** - Highly charged and charismatic; can inspire others; sensitive nervous system; must learn to treat body well; good intuition and flashes of insight; guided by faith and inventive mind.
+**11** - Highly charged and charismatic; can inspire others; sensitive nervous system; must learn to treat body well; good intuition and flashes of insight; guided by faith and inventive mind
 
 ### Mental Plane Numbers
 
@@ -280,40 +280,40 @@ Your Intuitive Plane Number describes your capacity for direct spiritual contact
 
 ### Emotional Plane Numbers
 
-**1** - Direct emotional expression; passionate responses; can be impulsive in emotional matters; prefers to lead in relationships.
+**1** - Direct emotional expression; passionate responses; can be impulsive in emotional matters; prefers to lead in relationships
 
-**2** - Gentle, sensitive emotional nature; seeks harmony in relationships; may be overly accommodating; values emotional security and partnership.
+**2** - Gentle, sensitive emotional nature; seeks harmony in relationships; may be overly accommodating; values emotional security and partnership
 
-**3** - Creative emotional expression; optimistic and cheerful; enjoys social interaction; may use humor to deflect serious emotions.
+**3** - Creative emotional expression; optimistic and cheerful; enjoys social interaction; may use humor to deflect serious emotions
 
-**4** - Steady, reliable emotional responses; prefers traditional approaches to relationships; may struggle with expressing deeper feelings; values emotional stability.
+**4** - Steady, reliable emotional responses; prefers traditional approaches to relationships; may struggle with expressing deeper feelings; values emotional stability
 
-**5** - Variable emotional nature; enjoys emotional variety and stimulation; may have difficulty with emotional commitment; seeks freedom in relationships.
+**5** - Variable emotional nature; enjoys emotional variety and stimulation; may have difficulty with emotional commitment; seeks freedom in relationships
 
-**6** - Nurturing, caring emotional nature; puts others' emotional needs first; natural counselor and healer; may become overly involved in others' problems.
+**6** - Nurturing, caring emotional nature; puts others' emotional needs first; natural counselor and healer; may become overly involved in others' problems
 
-**7** - Deep, introspective emotional nature; may appear emotionally distant; seeks meaningful emotional connections; values emotional privacy and depth.
+**7** - Deep, introspective emotional nature; may appear emotionally distant; seeks meaningful emotional connections; values emotional privacy and depth
 
-**8** - Controlled emotional expression; may suppress emotions for practical goals; values emotional strength and independence; can be demanding in relationships.
+**8** - Controlled emotional expression; may suppress emotions for practical goals; values emotional strength and independence; can be demanding in relationships
 
-**9** - Compassionate, universal emotional nature; feels deeply for humanity; may neglect personal emotional needs; seeks emotionally meaningful causes.
+**9** - Compassionate, universal emotional nature; feels deeply for humanity; may neglect personal emotional needs; seeks emotionally meaningful causes
 
 ### Intuitive Plane Numbers
 
-**1** - Strong intuitive leadership; receives insights about new directions and opportunities; trusts inner guidance for pioneering efforts.
+**1** - Strong intuitive leadership; receives insights about new directions and opportunities; trusts inner guidance for pioneering efforts
 
-**2** - Intuitive understanding of others; sensitive to emotional undercurrents; receives guidance about relationships and cooperation.
+**2** - Intuitive understanding of others; sensitive to emotional undercurrents; receives guidance about relationships and cooperation
 
-**3** - Creative intuitive insights; inspiration for artistic and expressive endeavors; intuitive understanding of communication and beauty.
+**3** - Creative intuitive insights; inspiration for artistic and expressive endeavors; intuitive understanding of communication and beauty
 
-**4** - Practical intuitive wisdom; insights about building and organizing; intuitive understanding of systems and structures.
+**4** - Practical intuitive wisdom; insights about building and organizing; intuitive understanding of systems and structures
 
-**5** - Intuitive understanding of freedom and change; receives insights about new experiences and opportunities; adaptable intuitive responses.
+**5** - Intuitive understanding of freedom and change; receives insights about new experiences and opportunities; adaptable intuitive responses
 
-**6** - Intuitive healing and nurturing abilities; guidance about caring for others; insights about family and community needs.
+**6** - Intuitive healing and nurturing abilities; guidance about caring for others; insights about family and community needs
 
-**7** - Highly developed intuitive abilities; deep spiritual insights; intuitive understanding of mysteries and hidden truths.
+**7** - Highly developed intuitive abilities; deep spiritual insights; intuitive understanding of mysteries and hidden truths
 
-**8** - Intuitive business and material insights; guidance about success and achievement; intuitive understanding of power and authority.
+**8** - Intuitive business and material insights; guidance about success and achievement; intuitive understanding of power and authority
 
-**9** - Universal intuitive wisdom; insights about humanitarian service; intuitive understanding of spiritual and philosophical matters.
+**9** - Universal intuitive wisdom; insights about humanitarian service; intuitive understanding of spiritual and philosophical matters
