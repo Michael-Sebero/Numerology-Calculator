@@ -156,7 +156,7 @@ Your Intuitive Plane Number describes your capacity for direct spiritual contact
 
 **5** - The Adventurer: Free-spirited, curious, versatile. Crave freedom and new experiences constantly
 
-**6** - The Nurturer: Caring, responsible, family-oriented. Natural healers who put others' needs first
+**6** - The Nurturer: Caring, responsible, family-oriented. Natural healers who put other's needs first
 
 **7** - The Seeker: Analytical, introspective, spiritual. Deep thinkers who seek truth and understanding
 
