@@ -12,9 +12,9 @@ python3 /path/to/numerology-calculator.py
 
 ## How to Use Numerology-Calculator
 
-* Input your full birth name and date of birth when prompted.
-* The script calculates the information.
-* You'll receive a structured breakdown of your numerological profile.
+* Input your full birth name and date of birth when prompted
+* The script calculates the information
+* You'll receive a structured breakdown of your numerological profile
 
 ```
 Example:
