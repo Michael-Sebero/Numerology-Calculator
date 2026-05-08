@@ -20,3 +20,6 @@ This Python script analyzes any calendar date to calculate its Greek Pythagorean
 
 ### Master Number Name Generator
 This python script will generate names which equate to master number values. 
+
+### Year Calculator
+This Python script analyzes any year to calculate its Greek Pythagorean, Hebrew Gematria and Combined Synthesis numbers, revealing the cosmological and spiritual significance of that date across two ancient numerological traditions.

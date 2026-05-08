@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # ─────────────────────────────────────────────────────────────────────────────
-# DATE NUMEROLOGY CALCULATOR
+# CALENDAR NUMEROLOGY CALCULATOR 
 # Five distinct numerological methods applied to any date:
 #
 #   1. GREEK PYTHAGOREAN (Isopsephy tradition)
@@ -855,15 +855,11 @@ MONTH_NAMES = [
 # MAIN
 # =============================================================================
 
-def main():
+import calendar as _calendar
 
-    date_str = input(bold("Enter a date (MM-DD-YYYY or MM/DD/YYYY): ")).strip()
 
-    try:
-        month, day, year = parse_date(date_str)
-    except ValueError as e:
-        print(f"\n  Error: {e}")
-        return
+def calculate_day(month, day, year):
+    """Run all five numerology methods for a single date and print results."""
 
     # ── Run all five methods ──────────────────────────────────────────────────
 
@@ -1059,6 +1055,104 @@ def main():
     ))
     print()
     print(wrap(cd["descriptor"]))
+    print()
+
+
+import io
+import os
+import re
+import sys
+
+
+# ---------------------------------------------------------------------------
+# ANSI escape-code stripper  (keeps the .txt file clean)
+# ---------------------------------------------------------------------------
+_ANSI_RE = re.compile(r'\033\[[0-9;]*m')
+
+def _strip_ansi(text: str) -> str:
+    return _ANSI_RE.sub('', text)
+
+
+class _TeeWriter:
+    """Write to both the terminal (with colour) and a buffer (plain text)."""
+    def __init__(self, terminal, buffer):
+        self._terminal = terminal
+        self._buffer   = buffer
+
+    def write(self, data):
+        self._terminal.write(data)
+        self._buffer.write(_strip_ansi(data))
+
+    def flush(self):
+        self._terminal.flush()
+        self._buffer.flush()
+
+    # Make it a valid file-like object
+    def fileno(self):          return self._terminal.fileno()
+    @property
+    def encoding(self):        return getattr(self._terminal, 'encoding', 'utf-8')
+    @property
+    def errors(self):          return getattr(self._terminal, 'errors', 'replace')
+
+
+def main():
+    raw = input(bold("Enter year (YYYY): ")).strip()
+
+    try:
+        year = int(raw)
+    except ValueError:
+        print("\n  Error: Year must be a number.")
+        return
+    if year < 1:
+        print("\n  Error: Year must be positive.")
+        return
+
+    # ── Output file ──────────────────────────────────────────────────────────
+    home_dir  = os.path.expanduser("~")
+    out_path  = os.path.join(home_dir, f"calendar-numerology-{year}.txt")
+    plain_buf = io.StringIO()
+
+    # Tee all print() output: colour → terminal, plain → buffer
+    original_stdout = sys.stdout
+    sys.stdout = _TeeWriter(original_stdout, plain_buf)
+
+    try:
+        total_days = sum(
+            _calendar.monthrange(year, m)[1] for m in range(1, 13)
+        )
+
+        print()
+        print("=" * 72)
+        print(f"  CALENDAR NUMEROLOGY  ·  FULL YEAR {year}")
+        print(f"  Calculating all {total_days} days  ·  5 methods each")
+        print("=" * 72)
+
+        for month in range(1, 13):
+            days_in_month = _calendar.monthrange(year, month)[1]
+
+            print()
+            print("=" * 72)
+            print(f"  {MONTH_NAMES[month].upper()}  {year}  ·  {days_in_month} days")
+            print("=" * 72)
+
+            for day in range(1, days_in_month + 1):
+                calculate_day(month, day, year)
+
+        print()
+        print("=" * 72)
+        print(f"  END OF {year}  ·  {total_days} days calculated")
+        print("=" * 72)
+        print()
+
+    finally:
+        sys.stdout = original_stdout          # always restore
+
+    # ── Write plain-text file ────────────────────────────────────────────────
+    with open(out_path, "w", encoding="utf-8") as fh:
+        fh.write(plain_buf.getvalue())
+
+    print()
+    print(bold(f"  Results saved to: {out_path}"))
     print()
 
 
