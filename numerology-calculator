@@ -1,6 +1,6 @@
 #!/bin/bash
 
-commands=("Birthdate Calculator" "Calendar Calculator" "Date Calculator" "Master Number Name Generator" "Quit")
+commands=("Birthdate Calculator" "Date Calculator" "Master Number Name Generator" "Month Calculator" "Year Calculator" "Quit")
 
 selected=0
 
@@ -28,16 +28,20 @@ execute_command() {
             python3 /home/user/Files/GitHub/Numerology-Calculator/calculators/birthdate-calculator.py
             read -p "Press Enter to return to the menu..."
             ;;
-        "Calendar Calculator") 
-            python3 /home/user/Files/GitHub/Numerology-Calculator/calculators/calendar-calculator.py
-            read -p "Press Enter to return to the menu..."
-            ;;
         "Date Calculator") 
             python3 /home/user/Files/GitHub/Numerology-Calculator/calculators/date-calculator.py
             read -p "Press Enter to return to the menu..."
             ;;
         "Master Number Name Generator") 
             python3 /home/user/Files/GitHub/Numerology-Calculator/calculators/master-number-name-generator.py
+            read -p "Press Enter to return to the menu..."
+            ;;
+        "Month Calculator") 
+            python3 /home/user/Files/GitHub/Numerology-Calculator/calculators/month-calculator.py
+            read -p "Press Enter to return to the menu..."
+            ;;
+        "Year Calculator") 
+            python3 /home/user/Files/GitHub/Numerology-Calculator/calculators/year-calculator.py
             read -p "Press Enter to return to the menu..."
             ;;
         "Quit") 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CALENDAR NUMEROLOGY CALCULATOR 
+# MONTH NUMEROLOGY CALCULATOR 
 # Five distinct numerological methods applied to any date:
 #
 #   1. GREEK PYTHAGOREAN (Isopsephy tradition)
@@ -1082,7 +1082,7 @@ def main():
 
     print()
     print("=" * 72)
-    print(f"  CALENDAR NUMEROLOGY  ·  {MONTH_NAMES[month]} {year}")
+    print(f"  MONTH NUMEROLOGY  ·  {MONTH_NAMES[month]} {year}")
     print(f"  Calculating all {days_in_month} days  ·  5 methods each")
     print("=" * 72)
 
