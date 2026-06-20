@@ -2,24 +2,40 @@
 
 # ─────────────────────────────────────────────────────────────────────────────
 # DATE NUMEROLOGY CALCULATOR
+#
+# Combines three calculation modes behind one arrow-key menu:
+#   • Date Calculator   -- single date, results printed to the terminal
+#   • Month Calculator  -- every day in a chosen month, printed to the terminal
+#   • Year Calculator   -- every day in a chosen year, printed to the terminal
+#     AND saved to ~/calendar-numerology-<year>.txt
+#
 # Five distinct numerological methods applied to any date:
 #
-#   1. GREEK PYTHAGOREAN (Isopsephy tradition)
+#   1. GREEK PYTHAGOREAN (Modern Pythagorean Numerology Method)
 #      Each component (month, day, year) reduced to 1-9 individually,
-#      then summed and reduced again.  Source: Numerology Wikipedia;
-#      Gematria Wikipedia -- Pythagorean / Isopsephy section.
+#      then summed and reduced again.  Source: Numerology Wikipedia --
+#      "Pythagorean method" section (Latin letters assigned 1-9 with
+#      digit reduction).  NOTE: this is the modern numerology convention,
+#      not ancient isopsephy.  Per Gematria Wikipedia, isopsephy sums raw
+#      Greek letter values WITHOUT reducing to a single digit (e.g. the
+#      word for "wine" = 70 is left as 70, never reduced to 7).
 #
 #   2. HEBREW STANDARD  (Mispar Hechrachi)
 #      Same arithmetic as Method 1, but sacred sums (13, 18, 26, 36)
 #      are preserved before final reduction.
 #      Source: Gematria Wikipedia -- Standard encoding; MyJewishLearning.
 #
-#   3. MISPAR KATAN  (All-Digits / Small Value)
+#   3. ALL-DIGITS SUM  (Digit-Sum Adaptation -- *not* literal Mispar Katan)
 #      Every individual digit of the full date string MMDDYYYY is summed
 #      directly -- no intermediate component reduction.  Sacred sums
 #      (13, 18, 26, 36, 40, 49, 50, 70) preserved before final reduction.
-#      Source: Gematria Wikipedia -- "Mispar katan calculates the value of
-#      each letter, but truncates all of the zeros."
+#      CORRECTED SOURCING: true Mispar katan (Gematria Wikipedia) truncates
+#      trailing zeros from each LETTER'S value (e.g. kaf=20 -> 2, tav=400
+#      -> 4); it is not a digit-by-digit sum of a number string. What this
+#      method actually resembles is "Mispar katan mispari" (integral
+#      reduced value): "the total numerical value of a word is reduced to
+#      a single digit" by repeated digit-summing -- applied here to the
+#      raw calendar digits rather than to a computed gematria total.
 #
 #   4. FULL COMPONENT  (Mispar Gadol-inspired)
 #      Month and day are used at full unreduced face value; year is summed
@@ -47,6 +63,14 @@
 # UTILITY
 # =============================================================================
 
+import calendar as _calendar
+import io
+import os
+import sys
+import termios
+import tty
+
+
 def reduce_to_single_digit(n):
     """Mispar katan mispari: repeatedly sum digits until 1-9."""
     while n > 9:
@@ -70,13 +94,60 @@ def parse_date(date_str):
     return m, d, y
 
 
-# =============================================================================
-# FIVE CALCULATION METHODS
-# =============================================================================
+def parse_month_year(raw_str):
+    """Accept MM-YYYY or MM/YYYY."""
+    sep = '-' if '-' in raw_str else '/'
+    parts = raw_str.split(sep)
+    if len(parts) != 2:
+        raise ValueError("Use MM-YYYY or MM/YYYY.")
+    try:
+        m, y = int(parts[0]), int(parts[1])
+    except ValueError:
+        raise ValueError("Month and year must be numbers.")
+    if not (1 <= m <= 12):
+        raise ValueError("Month must be 1-12.")
+    if y < 1:
+        raise ValueError("Year must be positive.")
+    return m, y
+
+
+# ---------------------------------------------------------------------------
+# ANSI escape-code stripper  (keeps the year-mode .txt export clean)
+# ---------------------------------------------------------------------------
+import re as _re
+_ANSI_RE = _re.compile(r'\033\[[0-9;]*m')
+
+
+def _strip_ansi(text: str) -> str:
+    return _ANSI_RE.sub('', text)
+
+
+class _TeeWriter:
+    """Write to both the terminal (with colour) and a buffer (plain text)."""
+    def __init__(self, terminal, buffer):
+        self._terminal = terminal
+        self._buffer   = buffer
+
+    def write(self, data):
+        self._terminal.write(data)
+        self._buffer.write(_strip_ansi(data))
+
+    def flush(self):
+        self._terminal.flush()
+        self._buffer.flush()
+
+    # Make it a valid file-like object
+    def fileno(self):          return self._terminal.fileno()
+    @property
+    def encoding(self):        return getattr(self._terminal, 'encoding', 'utf-8')
+    @property
+    def errors(self):          return getattr(self._terminal, 'errors', 'replace')
+
+
 
 def method_pythagorean(month, day, year):
     """
-    Method 1 — Greek Pythagorean / Isopsephy.
+    Method 1 — Modern Pythagorean Numerology (digit-reduction method).
     Reduce each component individually, sum, reduce.
     Returns (r_month, r_day, r_year, raw_sum, final).
     """
@@ -87,8 +158,9 @@ def method_pythagorean(month, day, year):
     return rm, rd, ry, raw, reduce_to_single_digit(raw)
 
 
-# Sacred sums reachable by the standard 3-component method (max raw = 27):
-HEBREW_SACRED_STANDARD = {13, 18, 26}  # 36 is impossible (max = 27); keep 36 for doc faithfulness
+# Sacred sums reachable by the standard 3-component method: each of
+# month/day/year is pre-reduced to 1-9 before summing, so max raw = 27;
+# 36+ cannot occur via this method.
 HEBREW_SACRED_STANDARD = {13, 18, 26}
 
 
@@ -104,7 +176,7 @@ def method_hebrew_standard(month, day, year):
     rd = reduce_to_single_digit(day)
     ry = reduce_to_single_digit(sum(int(d) for d in str(year)))
     raw = rm + rd + ry
-    if raw in {13, 18, 26}:
+    if raw in HEBREW_SACRED_STANDARD:
         return rm, rd, ry, raw, raw          # preserve the sacred value
     return rm, rd, ry, raw, reduce_to_single_digit(raw)
 
@@ -115,8 +187,11 @@ HEBREW_SACRED_EXTENDED = {13, 18, 26, 36, 40, 49, 50, 70}
 
 def method_katan(month, day, year):
     """
-    Method 3 — Mispar Katan (All-Digits Sum).
+    Method 3 — All-Digits Sum (digit-sum adaptation; not literal Mispar Katan).
     Concatenate date as MMDDYYYY, sum every digit, reduce.
+    Closer in spirit to "Mispar katan mispari" (repeated digit-summing to a
+    single digit) than to Mispar Katan proper (zero-truncation of letter
+    values) -- see corrected header note above.
     Sacred sums from HEBREW_SACRED_EXTENDED preserved.
     Returns (digits_used, raw_sum, final).
     """
@@ -178,7 +253,7 @@ def method_boneeh(month, day, year):
 
 
 # =============================================================================
-# GREEK DATA  (Pythagorean / Isopsephy tradition)
+# GREEK DATA  (Pythagorean number symbolism)
 # Sources: Numerology Wikipedia; Gematria Wikipedia; Britannica Pythagoreanism
 # =============================================================================
 
@@ -461,17 +536,20 @@ HEBREW_DATA = {
         "note": (
             "Gematria value: 6. Literal meaning: Peg, nail (Mathers Table). "
             "Six days of creation precede Shabbat rest (MyJewishLearning). "
-            "Tikkun (cosmic restoration) is a central Kabbalistic concept -- "
-            "the Lurianic doctrine of repairing broken vessels -- connected to "
-            "this number's joining function. Source: Kabbalah Britannica. "
+            "Tikkun ('cosmic restoration') is a central Lurianic Kabbalistic "
+            "doctrine, achieved through intense mystical life and unceasing "
+            "struggle against evil; it follows tzimtzum (the withdrawal of "
+            "divine light) and qellipot (the sinking of luminous particles "
+            "into matter, or 'shells'). Source: Kabbalah Britannica. "
         ),
         "descriptor": (
             "Vav -- the peg and nail, the fastener that holds things together. "
             "Six days of creation preceded Shabbat; Vav is the energy of active "
             "connection and building. In Lurianic Kabbalah, the great work of tikkun "
-            "(cosmic restoration) is carried out through unceasing effort against "
-            "what has broken apart. This date calls for the work of fastening: "
-            "what has been separated, reconnected; what broken, repaired."
+            "(cosmic restoration) is carried out not through ease but through "
+            "unceasing struggle against evil and an intensely lived mystical life. "
+            "This date calls for the work of fastening: sustained effort that "
+            "holds things in place."
         ),
     },
     7: {
@@ -527,10 +605,13 @@ HEBREW_DATA = {
     13: {
         "name": "Thirteen — Echad (Divine Unity & Mercy)",
         "note": (
-            "Gematria: 13 = Echad (One): aleph[1]+het[8]+dalet[4]=13. Verified in "
-            "Gematria Wikipedia: 'achad (one) is 1+8+4=13.' The 13 attributes of "
-            "divine mercy are recited on High Holidays (Exodus 34). Age of Bar Mitzvah. "
-            "Maimonides' 13 principles of faith, codified in the Yigdal prayer. "
+            "Gematria: 13 = Echad (One): aleph[1]+het[8]+dalet[4]=13 (standard "
+            "mispar hechrachi calculation; the Gematria Wikipedia 'achad' example "
+            "appears in the bone'eh section but its stated value was not "
+            "recoverable from the source text). The 13 attributes of divine mercy "
+            "are recited during Selichot and High Holiday prayers "
+            "(MyJewishLearning). Age of Bar Mitzvah. Maimonides' 13 principles of "
+            "faith, codified in the Yigdal prayer. "
         ),
         "descriptor": (
             "Thirteen -- the gematric value of Echad (One): Aleph (1) + Het (8) + "
@@ -747,12 +828,14 @@ COMBINED_DATA = {
         "name": "The Perfect Repair",
         "descriptor": (
             "The first perfect number meets Vav, the connecting peg -- and a day of "
-            "extraordinary completion and repair takes shape. Six was perfect to the "
+            "extraordinary completion takes shape. Six was perfect to the "
             "Greeks mathematically: sum and product and divisor-sum all coincide. In "
             "Hebrew tradition six days of creation precede Shabbat, and in Lurianic "
-            "Kabbalah the work of tikkun (cosmic restoration) is the great ongoing act "
-            "of reconnecting what has been broken apart. This date heals what is broken, "
-            "closes what is open, and restores what perfection was always intended to look like."
+            "Kabbalah the work of tikkun (cosmic restoration) is the great ongoing act, "
+            "carried out through unceasing struggle against evil and an intensely "
+            "lived mystical life. This date calls for sustained, active effort -- "
+            "the patient work of building toward what perfection was always intended "
+            "to look like."
         ),
     },
     7: {
@@ -852,18 +935,11 @@ MONTH_NAMES = [
 
 
 # =============================================================================
-# MAIN
+# CALCULATE & PRINT A SINGLE DAY
 # =============================================================================
 
-def main():
-
-    date_str = input(bold("Enter a date (MM-DD-YYYY or MM/DD/YYYY): ")).strip()
-
-    try:
-        month, day, year = parse_date(date_str)
-    except ValueError as e:
-        print(f"\n  Error: {e}")
-        return
+def calculate_day(month, day, year):
+    """Run all five numerology methods for a single date and print results."""
 
     # ── Run all five methods ──────────────────────────────────────────────────
 
@@ -875,7 +951,7 @@ def main():
     rm2, rd2, ry2, raw2, final2 = method_hebrew_standard(month, day, year)
     hebrew_std_num = final2
 
-    # Method 3: Mispar Katan (All-Digits)
+    # Method 3: All-Digits Sum (digit-sum adaptation, see Method 3 note above)
     digits3, raw3, final3 = method_katan(month, day, year)
     katan_num = final3
 
@@ -918,7 +994,7 @@ def main():
 
     digit_str = "+".join(str(d) for d in digits3)
     calc3 = f"digits→{raw3}→{final3}"
-    row("3. Mispar Katan (All-Digits)",  calc3,           katan_num,      green)
+    row("3. All-Digits Sum",            calc3,           katan_num,      green)
 
     calc4 = f"{m4}+{d4}+{yd4}={raw4}→{final4}"
     row("4. Full Component (Gadol)",     calc4,           gadol_num,      blue)
@@ -940,7 +1016,7 @@ def main():
 
     g = GREEK_DATA.get(greek_num, GREEK_DATA[9])
     subheader(
-        f"METHOD 1 · GREEK PYTHAGOREAN (ISOPSEPHY)  —  {greek_num}  ·  {g['name']}",
+        f"METHOD 1 · GREEK PYTHAGOREAN NUMEROLOGY  —  {greek_num}  ·  {g['name']}",
         cyan
     )
     print()
@@ -961,13 +1037,13 @@ def main():
     print()
     print(dim(wrap(f"Source note: {h2['note']}")))
 
-    # ── Method 3: Mispar Katan (All-Digits) ───────────────────────────────────
+    # ── Method 3: All-Digits Sum ───────────────────────────────────────────────
 
     h3 = lookup_hebrew(katan_num)
     preserved3 = " (sacred sum preserved)" if katan_num > 9 else ""
     digit_display = " + ".join(str(d) for d in digits3)
     subheader(
-        f"METHOD 3 · MISPAR KATAN (ALL-DIGITS SUM)  —  {katan_num}  ·  {h3['name']}{preserved3}",
+        f"METHOD 3 · ALL-DIGITS SUM  —  {katan_num}  ·  {h3['name']}{preserved3}",
         green
     )
     print()
@@ -975,11 +1051,13 @@ def main():
               f"{' (sacred, preserved)' if katan_num > 9 else ' → ' + str(katan_num)}"))
     print()
     print(wrap(
-        "Mispar Katan sums all individual digits of the date without any "
+        "This method sums every individual digit of the date without any "
         "intermediate component reduction, treating the full MMDDYYYY string "
-        "as a sequence of values. Each zero is present but contributes nothing "
-        "to the total, in keeping with the documented principle that this method "
-        "'truncates all of the zeros.'"
+        "as a sequence of values, then reduces the total the way Mispar katan "
+        "mispari does: repeatedly summing digits until a single digit remains. "
+        "It is a digit-sum adaptation, not literal Mispar Katan -- the documented "
+        "Mispar Katan method truncates trailing zeros from individual LETTER "
+        "values (e.g. kaf=20 becomes 2), which is a different operation."
     ))
     print()
     print(wrap(h3["descriptor"]))
@@ -1014,7 +1092,10 @@ def main():
 
     # ── Method 5: Bone'eh (Building Value) ────────────────────────────────────
 
-    h5 = GREEK_DATA.get(boneeh_num, GREEK_DATA[9])   # bone'eh is a structural method
+    # Bone'eh is documented only as a Hebrew gematria method (Gematria
+    # Wikipedia, "Other methods"); no Greek/Pythagorean counterpart is
+    # documented in these sources, so its meaning is drawn from Hebrew
+    # letter data only.
     boneeh_hebrew = lookup_hebrew(boneeh_num)
     subheader(
         f"METHOD 5 · BONE'EH (BUILDING VALUE)  —  {boneeh_num}",
@@ -1039,9 +1120,9 @@ def main():
         "contributor (weight 3x), the day next (2x), and the year last (1x)."
     ))
     print()
-    print(f"  {magenta(bold(str(boneeh_num)))}  Greek: {h5['name']}  |  Hebrew: {boneeh_hebrew['name']}")
+    print(f"  {magenta(bold(str(boneeh_num)))}  Hebrew: {boneeh_hebrew['name']}")
     print()
-    print(wrap(h5["descriptor"]))
+    print(wrap(boneeh_hebrew["descriptor"]))
 
     # ── Synthesis ─────────────────────────────────────────────────────────────
 
@@ -1060,6 +1141,184 @@ def main():
     print()
     print(wrap(cd["descriptor"]))
     print()
+
+
+# =============================================================================
+# ARROW-KEY MENU
+# (Same interaction style as the numerology-calculator launcher script:
+#  Up/Down arrows move the highlighted ➤ selector, Enter confirms.)
+# =============================================================================
+
+def _get_key():
+    """Read a single keypress (handles multi-byte arrow-key escape sequences)."""
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)
+    try:
+        tty.setraw(fd)
+        ch = sys.stdin.read(1)
+        if ch == '\x1b':
+            ch += sys.stdin.read(2)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+    return ch
+
+
+def run_menu(title, options):
+    """
+    Display an arrow-key navigable menu and return the selected option string.
+    Mirrors the numerology-calculator bash launcher's highlighted ➤ style.
+    """
+    selected = 0
+    while True:
+        os.system("clear")
+        print(bold(f"  {title}"))
+        print("  " + "-" * len(title))
+        for i, opt in enumerate(options):
+            if i == selected:
+                print(bold(f"➤ {opt}") + "\n")
+            else:
+                print(f"  {opt}\n")
+
+        key = _get_key()
+        if key == '\x1b[A':                       # Up arrow
+            selected = (selected - 1) % len(options)
+        elif key == '\x1b[B':                     # Down arrow
+            selected = (selected + 1) % len(options)
+        elif key in ('\r', '\n'):                  # Enter
+            return options[selected]
+        elif key == 'q':                           # quick-quit
+            return "Quit"
+
+
+# =============================================================================
+# MODE RUNNERS
+# =============================================================================
+
+def run_date_mode():
+    """Single date -> printed to the terminal."""
+    date_str = input(bold("Enter a date (MM-DD-YYYY or MM/DD/YYYY): ")).strip()
+
+    try:
+        month, day, year = parse_date(date_str)
+    except ValueError as e:
+        print(f"\n  Error: {e}")
+        return
+
+    calculate_day(month, day, year)
+
+
+def run_month_mode():
+    """Every day in a chosen month -> printed to the terminal."""
+    raw = input(bold("Enter month and year (MM-YYYY or MM/YYYY): ")).strip()
+
+    try:
+        month, year = parse_month_year(raw)
+    except ValueError as e:
+        print(f"\n  Error: {e}")
+        return
+
+    days_in_month = _calendar.monthrange(year, month)[1]
+
+    print()
+    print("=" * 72)
+    print(f"  MONTH NUMEROLOGY  ·  {MONTH_NAMES[month]} {year}")
+    print(f"  Calculating all {days_in_month} days  ·  5 methods each")
+    print("=" * 72)
+
+    for day in range(1, days_in_month + 1):
+        calculate_day(month, day, year)
+
+    print()
+    print("=" * 72)
+    print(f"  END OF {MONTH_NAMES[month].upper()} {year}")
+    print("=" * 72)
+    print()
+
+
+def run_year_mode():
+    """
+    Every day in a chosen year -> printed to the terminal AND saved to
+    ~/calendar-numerology-<year>.txt (colour stripped from the saved file).
+    """
+    raw = input(bold("Enter year (YYYY): ")).strip()
+
+    try:
+        year = int(raw)
+    except ValueError:
+        print("\n  Error: Year must be a number.")
+        return
+    if year < 1:
+        print("\n  Error: Year must be positive.")
+        return
+
+    # ── Output file ──────────────────────────────────────────────────────────
+    home_dir  = os.path.expanduser("~")
+    out_path  = os.path.join(home_dir, f"calendar-numerology-{year}.txt")
+    plain_buf = io.StringIO()
+
+    # Tee all print() output: colour → terminal, plain → buffer
+    original_stdout = sys.stdout
+    sys.stdout = _TeeWriter(original_stdout, plain_buf)
+
+    try:
+        total_days = sum(
+            _calendar.monthrange(year, m)[1] for m in range(1, 13)
+        )
+
+        print()
+        print("=" * 72)
+        print(f"  CALENDAR NUMEROLOGY  ·  FULL YEAR {year}")
+        print(f"  Calculating all {total_days} days  ·  5 methods each")
+        print("=" * 72)
+
+        for month in range(1, 13):
+            days_in_month = _calendar.monthrange(year, month)[1]
+
+            print()
+            print("=" * 72)
+            print(f"  {MONTH_NAMES[month].upper()}  {year}  ·  {days_in_month} days")
+            print("=" * 72)
+
+            for day in range(1, days_in_month + 1):
+                calculate_day(month, day, year)
+
+        print()
+        print("=" * 72)
+        print(f"  END OF {year}  ·  {total_days} days calculated")
+        print("=" * 72)
+        print()
+
+    finally:
+        sys.stdout = original_stdout          # always restore
+
+    # ── Write plain-text file ────────────────────────────────────────────────
+    with open(out_path, "w", encoding="utf-8") as fh:
+        fh.write(plain_buf.getvalue())
+
+    print()
+    print(bold(f"  Results saved to: {out_path}"))
+    print()
+
+
+# =============================================================================
+# MAIN
+# =============================================================================
+
+def main():
+    options = ["Date Calculator", "Month Calculator", "Year Calculator", "Quit"]
+    choice = run_menu("Date Numerology Calculator", options)
+
+    os.system("clear")
+
+    if choice == "Date Calculator":
+        run_date_mode()
+    elif choice == "Month Calculator":
+        run_month_mode()
+    elif choice == "Year Calculator":
+        run_year_mode()
+    else:
+        print(bold("\nExiting script"))
+        return
 
 
 if __name__ == "__main__":
