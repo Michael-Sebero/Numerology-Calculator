@@ -6,8 +6,11 @@
 # Combines three calculation modes behind one arrow-key menu:
 #   • Date Calculator   -- single date, results printed to the terminal
 #   • Month Calculator  -- every day in a chosen month, printed to the terminal
-#   • Year Calculator   -- every day in a chosen year, printed to the terminal
-#     AND saved to ~/calendar-numerology-<year>.txt
+#   • Year Calculator   -- every day in a chosen year, printed to the terminal,
+#     saved to ~/calendar-numerology-<year>.txt, AND plotted as an
+#     interactive, zoomable line graph (highs & lows of the Greek ⊕ Hebrew
+#     Standard synthesis number) saved to
+#     ~/calendar-numerology-<year>-graph.html
 #
 # Five distinct numerological methods applied to any date:
 #
@@ -69,6 +72,7 @@ import os
 import sys
 import termios
 import tty
+from datetime import date
 
 
 def reduce_to_single_digit(n):
@@ -250,6 +254,18 @@ def method_boneeh(month, day, year):
 
     step1, step2, step3 = steps
     return m, d, y, (step1, step2, step3), reduce_to_single_digit(step3)
+
+
+def compute_synthesis_number(month, day, year):
+    """
+    Lightweight version of the Greek ⊕ Hebrew Standard synthesis calculation
+    found inside calculate_day() -- same formula, but skips every print()
+    call so it can be run quickly across an entire year for graphing.
+    Returns just the final combined number (always reduced to 1-9).
+    """
+    _, _, _, _, greek_num = method_pythagorean(month, day, year)
+    _, _, _, _, hebrew_std_num = method_hebrew_standard(month, day, year)
+    return reduce_to_single_digit(greek_num + reduce_to_single_digit(hebrew_std_num))
 
 
 # =============================================================================
@@ -1237,8 +1253,10 @@ def run_month_mode():
 
 def run_year_mode():
     """
-    Every day in a chosen year -> printed to the terminal AND saved to
-    ~/calendar-numerology-<year>.txt (colour stripped from the saved file).
+    Every day in a chosen year -> printed to the terminal, saved to
+    ~/calendar-numerology-<year>.txt (colour stripped from the saved file),
+    AND plotted as an interactive, zoomable line graph saved to
+    ~/calendar-numerology-<year>-graph.html.
     """
     raw = input(bold("Enter year (YYYY): ")).strip()
 
@@ -1259,6 +1277,8 @@ def run_year_mode():
     # Tee all print() output: colour → terminal, plain → buffer
     original_stdout = sys.stdout
     sys.stdout = _TeeWriter(original_stdout, plain_buf)
+
+    graph_dates, graph_values = [], []
 
     try:
         total_days = sum(
@@ -1281,6 +1301,8 @@ def run_year_mode():
 
             for day in range(1, days_in_month + 1):
                 calculate_day(month, day, year)
+                graph_dates.append(date(year, month, day))
+                graph_values.append(compute_synthesis_number(month, day, year))
 
         print()
         print("=" * 72)
@@ -1297,7 +1319,111 @@ def run_year_mode():
 
     print()
     print(bold(f"  Results saved to: {out_path}"))
+
+    # ── Graph (highs & lows, star on peak days, x on low days) ───────────────
+    graph_result = _build_year_graph(year, graph_dates, graph_values)
+    if graph_result:
+        graph_path, peaks_n, lows_n = graph_result
+        print(bold(f"  Graph saved to: {graph_path}"))
+        print(dim(
+            f"  {peaks_n} peak day(s) marked with a star, {lows_n} low day(s) "
+            f"marked with an x -- drag the range slider (or scroll/box-select "
+            f"on the chart) to zoom into any week or day."
+        ))
+    else:
+        print(dim(
+            "  (Skipped the graph -- install 'plotly' to also get a "
+            "zoomable HTML chart:  pip install plotly)"
+        ))
     print()
+
+
+def _build_year_graph(year, dates, values):
+    """
+    Build the interactive, zoomable highs & lows line graph for a year's
+    worth of (date, synthesis_number) pairs and save it next to the .txt
+    export as a self-contained HTML file.
+
+    The line traces the daily high/low wave for the whole year. Peak
+    days (9, "The Great Threshold") get a star marker; low days
+    (1, "The Sovereign Origin") get an x marker. A range slider sits
+    under the chart so the whole year stays visible while you drag to
+    zoom into any week or day -- scrolling or box-selecting on the plot
+    itself zooms too.
+
+    Returns (out_path, peak_count, low_count), or None if the optional
+    'plotly' package isn't installed.
+    """
+    try:
+        import plotly.graph_objects as go
+    except ImportError:
+        return None
+
+    peak_dates = [d for d, v in zip(dates, values) if v == 9]
+    low_dates  = [d for d, v in zip(dates, values) if v == 1]
+
+    def hover(d, v, tag=""):
+        name = COMBINED_DATA[v]["name"]
+        suffix = f" ({tag})" if tag else ""
+        return f"{d.strftime('%B %-d, %Y')}<br>Number {v} · {name}{suffix}"
+
+    hover_main = [hover(d, v) for d, v in zip(dates, values)]
+    hover_peak = [hover(d, 9, "peak") for d in peak_dates]
+    hover_low  = [hover(d, 1, "low") for d in low_dates]
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=dates, y=values, mode="lines", name="Daily number",
+        line=dict(width=2, color="#2a78d6"),
+        hovertext=hover_main, hoverinfo="text",
+    ))
+    fig.add_trace(go.Scatter(
+        x=peak_dates, y=[9] * len(peak_dates), mode="markers",
+        name="Peak day (9)",
+        marker=dict(symbol="star", size=10, color="#0ca30c",
+                    line=dict(width=1, color="#085041")),
+        hovertext=hover_peak, hoverinfo="text",
+    ))
+    fig.add_trace(go.Scatter(
+        x=low_dates, y=[1] * len(low_dates), mode="markers",
+        name="Low day (1)",
+        marker=dict(symbol="x", size=9, color="#d03b3b",
+                    line=dict(width=1, color="#791f1f")),
+        hovertext=hover_low, hoverinfo="text",
+    ))
+
+    # Dropped the "Date" axis title -- with the range slider on, it was
+    # rendering right where the legend sits and colliding with "Peak day".
+    # The month labels already make the axis self-explanatory. Also
+    # opened up the figure generally (taller, bigger bottom margin) so
+    # the plot, slider, and legend each get clear room of their own.
+    fig.update_layout(
+        title=dict(
+            text=f"Calendar numerology {year} — daily synthesis (Greek ⊕ Hebrew Std)",
+            x=0.5, xanchor="center", y=0.97, yanchor="top",
+            font=dict(size=17),
+        ),
+        template="plotly_white",
+        hovermode="closest",
+        width=2600,
+        height=650,
+        legend=dict(
+            orientation="h", x=0.5, xanchor="center", y=-0.40, yanchor="top",
+            font=dict(size=11), bgcolor="rgba(0,0,0,0)",
+        ),
+        margin=dict(t=90, b=220, l=60, r=40),
+    )
+    fig.update_yaxes(title="Synthesis number", dtick=1, range=[0.5, 9.5])
+    fig.update_xaxes(
+        rangeslider=dict(visible=True),
+    )
+
+    home_dir = os.path.expanduser("~")
+    out_path = os.path.join(home_dir, f"calendar-numerology-{year}-graph.html")
+    fig.write_html(out_path)
+
+    return out_path, len(peak_dates), len(low_dates)
 
 
 # =============================================================================

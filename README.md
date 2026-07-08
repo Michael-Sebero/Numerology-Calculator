@@ -1,6 +1,12 @@
 ## Documentation
 An explanation on how each of these calculators work can be found [here](https://github.com/Michael-Sebero/Numerology-Calculator/tree/main/documentation).
 
+## Requirements 
+
+```
+pip3 install plotly
+```
+
 ## How to Install
 
 ```
