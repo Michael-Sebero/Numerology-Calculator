@@ -1,7 +1,16 @@
 #!/usr/bin/env python3
 
+import calendar
+import re
+import unicodedata
+
+
 def get_letter_value(letter):
-    """Convert letter to numerological value using Pythagorean system"""
+    """Convert letter to numerological value using Pythagorean system.
+
+    Equivalent to the digit-reduced ordinal cipher (A=1 ... Z=26) that
+    Britannica describes for arithmomancy: J=10 -> 1, S=19 -> 1, Z=26 -> 8.
+    """
     letter_values = {
         'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6, 'G': 7, 'H': 8, 'I': 9,
         'J': 1, 'K': 2, 'L': 3, 'M': 4, 'N': 5, 'O': 6, 'P': 7, 'Q': 8, 'R': 9,
@@ -21,64 +30,80 @@ def reduce_to_single_digit(number):
     
     return number
 
+def parse_birth_date(birth_date):
+    """Parse MM-DD-YYYY or MM/DD/YYYY, rejecting dates that don't exist"""
+    parts = re.split(r'[-/]', birth_date.strip())
+    try:
+        month, day, year = (int(p) for p in parts)
+    except ValueError:
+        raise ValueError("Invalid date format. Please use MM-DD-YYYY or MM/DD/YYYY")
+    if not 1 <= month <= 12:
+        raise ValueError("Month must be 1-12")
+    if not 1 <= year <= 9999:
+        raise ValueError("Year must be 1-9999")
+    days_in_month = calendar.monthrange(year, month)[1]
+    if not 1 <= day <= days_in_month:
+        raise ValueError(f"Day must be 1-{days_in_month} for that month")
+    return month, day, year
+
 def calculate_life_path(birth_date):
     """Calculate Life Path number from birth date"""
-    try:
-        # Parse the date (MM-DD-YYYY or MM/DD/YYYY)
-        if '-' in birth_date:
-            parts = birth_date.split('-')
-        elif '/' in birth_date:
-            parts = birth_date.split('/')
-        else:
-            raise ValueError("Invalid date format")
-        
-        month, day, year = int(parts[0]), int(parts[1]), int(parts[2])
-        
-        # Reduce each part separately first
-        reduced_month = reduce_to_single_digit(month)
-        reduced_day = reduce_to_single_digit(day)
-        
-        # Reduce year by adding all digits first, then reducing
-        year_sum = sum(int(digit) for digit in str(year))
-        reduced_year = reduce_to_single_digit(year_sum)
-        
-        # Add the three reduced parts and reduce again
-        total = reduced_month + reduced_day + reduced_year
-        return reduce_to_single_digit(total)
-        
-    except (ValueError, IndexError):
-        raise ValueError("Invalid date format. Please use MM-DD-YYYY or MM/DD/YYYY")
+    month, day, year = parse_birth_date(birth_date)
+    
+    # Reduce each part separately first
+    reduced_month = reduce_to_single_digit(month)
+    reduced_day = reduce_to_single_digit(day)
+    
+    # Reduce year by adding all digits first, then reducing
+    year_sum = sum(int(digit) for digit in str(year))
+    reduced_year = reduce_to_single_digit(year_sum)
+    
+    # Add the three reduced parts and reduce again
+    total = reduced_month + reduced_day + reduced_year
+    return reduce_to_single_digit(total)
+
+def get_name_words(name):
+    """Split a name into words of plain A-Z letters.
+
+    Accents are removed first (José -> JOSE) so accented letters still
+    count; hyphens, apostrophes and spaces separate words.
+    """
+    decomposed = unicodedata.normalize('NFKD', name)
+    plain = ''.join(c for c in decomposed if not unicodedata.combining(c))
+    return re.findall(r'[A-Z]+', plain.upper())
+
+def is_y_vowel(word, i):
+    """Decide whether the Y at word[i] acts as a vowel.
+
+    Y is a consonant when it starts a word before a vowel (Young, Yolanda)
+    or follows a vowel (Floyd, Raymond); otherwise it is a vowel (Mary,
+    Lynn, Bryan, Yvonne).
+    """
+    vowel_letters = 'AEIOU'
+    if i == 0:
+        return len(word) == 1 or word[1] not in vowel_letters
+    return word[i-1] not in vowel_letters
 
 def get_vowels(name):
     """Extract vowels from name, including Y when used as vowel"""
     vowels = []
-    name = name.upper().replace(' ', '')
     vowel_letters = 'AEIOU'
     
-    for i, letter in enumerate(name):
-        if letter in vowel_letters:
-            vowels.append(letter)
-        elif letter == 'Y':
-            # Include Y if it's used as a vowel (simple heuristic)
-            # Y is typically a vowel when not at the beginning of a syllable
-            if i > 0 and name[i-1] not in vowel_letters:
+    for word in get_name_words(name):
+        for i, letter in enumerate(word):
+            if letter in vowel_letters or (letter == 'Y' and is_y_vowel(word, i)):
                 vowels.append(letter)
     
     return vowels
 
 def get_consonants(name):
-    """Extract consonants from name"""
+    """Extract consonants from name, including Y when used as consonant"""
     consonants = []
-    name = name.upper().replace(' ', '')
     vowel_letters = 'AEIOU'
     
-    for i, letter in enumerate(name):
-        if letter.isalpha() and letter not in vowel_letters:
-            if letter == 'Y':
-                # Include Y as consonant if at beginning or after vowel
-                if i == 0 or name[i-1] in vowel_letters:
-                    consonants.append(letter)
-            else:
+    for word in get_name_words(name):
+        for i, letter in enumerate(word):
+            if letter not in vowel_letters and not (letter == 'Y' and is_y_vowel(word, i)):
                 consonants.append(letter)
     
     return consonants
@@ -86,7 +111,7 @@ def get_consonants(name):
 def get_physical_plane_letters(name):
     """Extract Physical Plane letters from name"""
     physical_plane_letters = []
-    name = name.upper().replace(' ', '')
+    name = ''.join(get_name_words(name))
     
     # Physical Plane letters: E (Creative), W (Vacillating), D, M (Grounded)
     for letter in name:
@@ -98,7 +123,7 @@ def get_physical_plane_letters(name):
 def get_mental_plane_letters(name):
     """Extract Mental Plane letters from name"""
     mental_plane_letters = []
-    name = name.upper().replace(' ', '')
+    name = ''.join(get_name_words(name))
     
     # Mental Plane letters: A (Creative), H, J, N, P (Vacillating), G, L (Grounded)
     for letter in name:
@@ -110,7 +135,7 @@ def get_mental_plane_letters(name):
 def get_emotional_plane_letters(name):
     """Extract Emotional Plane letters from name"""
     emotional_plane_letters = []
-    name = name.upper().replace(' ', '')
+    name = ''.join(get_name_words(name))
     
     # Emotional Plane letters: I, O, R, Z (Creative), B, S, T, X (Vacillating)
     # Note: No grounded emotional letters according to official chart
@@ -123,7 +148,7 @@ def get_emotional_plane_letters(name):
 def get_intuitive_plane_letters(name):
     """Extract Intuitive Plane letters from name"""
     intuitive_plane_letters = []
-    name = name.upper().replace(' ', '')
+    name = ''.join(get_name_words(name))
     
     # Intuitive Plane letters: K (Creative), F, Q, U, Y (Vacillating), C, V (Grounded)
     for letter in name:
@@ -144,7 +169,7 @@ def calculate_soul_urge(name):
 
 def calculate_expression(name):
     """Calculate Expression number from all letters in name"""
-    name = name.upper().replace(' ', '')
+    name = ''.join(get_name_words(name))
     total = sum(get_letter_value(letter) for letter in name if letter.isalpha())
     return reduce_to_single_digit(total)
 
@@ -188,7 +213,7 @@ def calculate_personality(name):
 
 def get_creative_grounded_vacillating_totals(name):
     """Calculate totals for Creative, Vacillating, and Grounded letters"""
-    name = name.upper().replace(' ', '')
+    name = ''.join(get_name_words(name))
     
     # Based on the official chart from numerology.center - corrected categorization
     creative_letters = 'EAIORZK'      # E, A, I, O, R, Z, K
@@ -288,7 +313,7 @@ def get_core_traits():
         },
         7: {
             "positive": {
-                "analytical": 5, "spiritual": 5, "wisdom": 4, "introspection": 4, 
+                "analytical": 5, "spirituality": 5, "wisdom": 4, "introspection": 4, 
                 "intuition": 4, "perfectionism": 3, "mystery": 3
             },
             "negative": {
@@ -560,7 +585,7 @@ def generate_identity_titles(pyth_dominant_positive, pyth_dominant_negative, pla
         ('isolation', 'pessimism'): "Pessimistic Isolator",
         ('emotional distance', 'aloofness'): "Emotionally Distant Observer",
         ('oversensitivity', 'nervousness'): "Anxious Overthinker",
-        ('withdrawal', 'introspection'): "Self-Isolating Thinker",
+        ('isolation', 'secretiveness'): "Self-Isolating Thinker",
         
         # Instability/Chaos combinations
         ('restlessness', 'impulsiveness'): "Restless Wanderer",
@@ -678,7 +703,7 @@ def main():
         name = input(f"\033[1mEnter your full name: \033[0m").strip()
         birth_date = input(f"\033[1mEnter your birth date (MM-DD-YYYY or MM/DD/YYYY): \033[0m").strip()
         
-        if not name or not birth_date:
+        if not get_name_words(name) or not birth_date:
             print("Error: Please provide both name and birth date.")
             return
         

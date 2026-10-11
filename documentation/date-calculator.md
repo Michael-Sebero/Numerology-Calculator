@@ -1,12 +1,18 @@
 ## Description
 
-**Date Calculator** analyzes any calendar date to generate a complete numerological reading across five distinct methods drawn from Greek Isopsephy (Pythagorean) and Hebrew Gematria traditions, plus a synthesized Combined reading that draws from both. This script provides insight into the symbolic, spiritual, and cosmological significance of a given date based on the numeric values derived from its month, day, and year components.
+**Date Calculator** analyzes any calendar date with five numerological methods — one from modern Pythagorean numerology and four from Hebrew gematria — plus a synthesis that combines the Greek and Hebrew readings. It has three modes, chosen from an arrow-key menu:
+
+* **Date Calculator** — one date, printed to the terminal
+* **Month Calculator** — every day of a month (enter `MM-YYYY` or `MM/YYYY`)
+* **Year Calculator** — every day of a year (enter `YYYY`), printed to the terminal and saved to `~/calendar-numerology-<year>.txt`. If `plotly` is installed it also saves an interactive, zoomable graph of the daily synthesis number to `~/calendar-numerology-<year>-graph.html`, with peak days (9) starred and low days (1) crossed.
+
+Dates must exist: February 30 or April 31 is rejected.
 
 ## How to Use Date Calculator
 
-* Input any date when prompted in MM-DD-YYYY or MM/DD/YYYY format
-* The script calculates all five methods simultaneously
-* You'll receive a structured breakdown with a summary table followed by an individual reading for each method and a final synthesis
+* Choose a mode, then enter a date in MM-DD-YYYY or MM/DD/YYYY format (or a month or year)
+* The script writes the date in Hebrew numerals and runs all five methods
+* You'll receive a summary table, an individual reading for each method and a final synthesis
 
 ```
 Example:
@@ -17,23 +23,30 @@ Enter a date (MM-DD-YYYY or MM/DD/YYYY): 02-28-2026
   DATE  ·  February 28, 2026
 ========================================================================
 
+  In Hebrew numerals (letters as numbers):
+    Month     2  =  Bet 2                               ב׳
+    Day      28  =  Kaf 20 + Het 8                      כ״ח
+    Year   2026  =  Bet 2000 + Kaf 20 + Vav 6           ב׳כ״ו
+
   ────────────────────────────────────────────────────────────────────
-  METHOD                            CALCULATION             RESULT
+  METHOD                          CALCULATION               RESULT
   ────────────────────────────────────────────────────────────────────
-  1. Greek Pythagorean                2+1+1=4→4      4
-  2. Hebrew Standard (Hechrachi)      2+1+1=4→4      4
-  3. Mispar Katan (All-Digits)        digits→22→4    4
-  4. Full Component (Gadol)           2+28+10=40→40  40 ★
-  5. Bone'eh (Building Value)         3×2+2×1+1=9→9  9
+  1. Greek Pythagorean            2+1+1=4                        4
+  2. Hebrew Standard (Hechrachi)  2+28+2026=2056→13             13 ★
+  3. Mispar Katan (Small Value)   2+10+10=22→4                   4
+  4. Full Component               2+28+10=40                    40 ★
+  5. Bone'eh (Building Value)     3×2+2×1+1=9                    9
   ────────────────────────────────────────────────────────────────────
-  SYNTHESIS (Greek ⊕ Hebrew Std)      4+4→8          8
+  SYNTHESIS (Greek ⊕ Bone'eh)     4+9=13→4                       4
   ────────────────────────────────────────────────────────────────────
 
   ★ = sacred number preserved before final reduction
+  Methods 1-4 always share a final digit (4); they differ only in
+  the sacred numbers their totals pass through on the way down.
 
 
 ------------------------------------------------------------------------
-  METHOD 1 · GREEK PYTHAGOREAN (ISOPSEPHY)  —  4  ·  The Tetrad — Justice
+  METHOD 1 · GREEK PYTHAGOREAN NUMEROLOGY  —  4  ·  The Tetrad — Justice
 ------------------------------------------------------------------------
 
   The Tetrad -- justice and the order of the material world. The
@@ -50,8 +63,47 @@ Enter a date (MM-DD-YYYY or MM/DD/YYYY): 02-28-2026
   directions.
 
 ------------------------------------------------------------------------
-  METHOD 2 · HEBREW STANDARD (MISPAR HECHRACHI)  —  4  ·  Dalet — Door
+  METHOD 2 · HEBREW STANDARD (MISPAR HECHRACHI)  —  13  ·  Thirteen — Echad (Divine Unity & Mercy) (sacred number preserved)
 ------------------------------------------------------------------------
+
+  Absolute value: 2 + 28 + 2026 = 2056→13  (sacred, preserved)
+
+  In mispar hechrachi every letter keeps its full standard value (1-9,
+  10-90, 100-400). A number written in Hebrew numerals therefore has
+  itself as its absolute value, so the date's total is simply month +
+  day + year. The total is reduced by mispar katan mispari --
+  repeatedly summing its digits -- stopping at the first sacred number
+  the reduction reaches.
+
+  Thirteen -- the gematric value of Echad (One): Aleph (1) + Het (8) +
+  Dalet (4) = 13. God is declared One in the Shema, and thirteen is the
+  number through which that Oneness expresses its mercy: the 13
+  attributes of divine compassion recited on the High Holidays are the
+  face God turns toward those who have strayed. Thirteen is also the
+  age of Bar Mitzvah -- when a boy becomes responsible for all 613
+  mitzvot. This date vibrates with the mercy of the One who counts
+  every soul as infinitely precious.
+
+  Source note: Gematria: 13 = Echad (One): aleph[1]+het[8]+dalet[4]=13
+  -- stated directly in Gematria Wikipedia ('"achad" (one) is 1+8+4 =
+  13'), which also gives its bone'eh value as 23. The 13 attributes of
+  divine mercy are recited during Selichot and High Holiday prayers
+  (MyJewishLearning). Age of Bar Mitzvah. Maimonides' 13 principles of
+  faith, codified in the Yigdal prayer. The 13 lunar months of the year
+  led the Hebrews to consider 13 auspicious (Britannica).
+
+------------------------------------------------------------------------
+  METHOD 3 · MISPAR KATAN (SMALL VALUE)  —  4  ·  Dalet — Door
+------------------------------------------------------------------------
+
+  Letter values, zeros truncated:  2  |  2 + 8  |  2 + 2 + 6  =  22→4
+
+  Mispar katan ('small value') counts each letter with all of its zeros
+  truncated: Kaf (20) counts 2, Tav (400) counts 4, and a thousands
+  letter such as Bet-as-2000 counts 2. For a date this is the sum of
+  its digits -- except that Hebrew writes 15 and 16 as Tet + Vav (9+6)
+  and Tet + Zayin (9+7), so those contribute 15 and 16 rather than 6
+  and 7. The total is then reduced the same way as Method 2.
 
   Dalet -- the door, the threshold that marks an entrance. Four
   structures Jewish life at its foundations: the four matriarchs Sarah,
@@ -68,43 +120,16 @@ Enter a date (MM-DD-YYYY or MM/DD/YYYY): 02-28-2026
   garments.
 
 ------------------------------------------------------------------------
-  METHOD 3 · MISPAR KATAN (ALL-DIGITS SUM)  —  4  ·  Dalet — Door
+  METHOD 4 · FULL COMPONENT  —  40  ·  Forty — The Great Transformation (sacred number preserved)
 ------------------------------------------------------------------------
 
-  Date digits: 0 + 2 + 2 + 8 + 2 + 0 + 2 + 6 = 22 → 4
+  Month 2 (unreduced)  +  Day 28 (unreduced)  +  Year digit-sum 10 (not pre-reduced)  =  40  (sacred, preserved)
 
-  Mispar Katan sums all individual digits of the date without any
-  intermediate component reduction, treating the full MMDDYYYY string
-  as a sequence of values. Each zero is present but contributes nothing
-  to the total, in keeping with the documented principle that this
-  method 'truncates all of the zeros.'
-
-  Dalet -- the door, the threshold that marks an entrance. Four
-  structures Jewish life at its foundations: the four matriarchs Sarah,
-  Rebecca, Rachel, and Leah; and the four cups that frame the Passover
-  seder, along with the Four Questions and Four Sons. Four also
-  describes the shape of the world: four rivers flowed from Eden, four
-  winds blow from four directions. This date stands at a threshold that
-  opens in every direction at once.
-
-  Source note: Gematria value: 4. Literal meaning: Door (Mathers
-  Table). Four matriarchs: Sarah, Rebecca, Rachel, Leah. Four cups at
-  Passover; Four Questions; Four Sons. Four rivers from Eden; four
-  winds; four corners of heaven and earth. Four corners of tzitzit
-  garments.
-
-------------------------------------------------------------------------
-  METHOD 4 · FULL COMPONENT (MISPAR GADOL-INSPIRED)  —  40  ·  Forty — The Great Transformation (sacred sum preserved)
-------------------------------------------------------------------------
-
-  Month 2 (unreduced)  +  Day 28 (unreduced)  +  Year digit-sum 10 (not pre-reduced)  =  40 (sacred, preserved)
-
-  In mispar gadol, larger letter forms (the 'final' forms of five
-  Hebrew letters) retain values from 500 to 900 rather than being
-  reduced. Applied to a date, this method preserves the full magnitudes
-  of month and day as they are -- not pre-collapsing them to a single
-  digit -- and sums the year's digits without early reduction, keeping
-  the larger intermediate value before a single final reduction.
+  An adaptation rather than a documented gematria method: month and day
+  keep their full (absolute) values while the year contributes only its
+  digit sum (its small value), without early reduction. The mid-sized
+  totals this produces are where sacred numbers such as 40, 49, 50 and
+  70 can appear. The total is reduced the same way as Method 2.
 
   Forty -- the number of radical and irreversible transformation in
   Hebrew Scripture. God sent forty days of rain before the world was
@@ -134,109 +159,105 @@ Enter a date (MM-DD-YYYY or MM/DD/YYYY): 02-28-2026
   Bone'eh (building value) walks through each 'letter' of a word and at
   each step adds the cumulative sum of all ORIGINAL letter values seen
   so far plus the current letter value to a running total -- not the
-  bone'eh total itself. This makes the result sensitive to sequence:
-  earlier components carry more cumulative weight, just as the first
-  letters of a Hebrew word shape the resonance of those that follow.
-  The month, as the first 'letter' of the date, is thus the heaviest
-  contributor (weight 3x), the day next (2x), and the year last (1x).
+  bone'eh total itself (Gematria Wikipedia: achad = 1 + (1+8) + (1+8+4)
+  = 23). This makes the result sensitive to sequence: earlier
+  components carry more cumulative weight. The month, as the first
+  'letter' of the date, is thus the heaviest contributor (weight 3x),
+  the day next (2x), and the year last (1x).
 
-  9  Greek: The Ennead — Boundary of the Decade  |  Hebrew: Tet — Serpent
+  9  Hebrew: Tet — Serpent
 
-  The Ennead -- the last single digit, standing at the boundary before
-  Ten, the Pythagorean most perfect number. Ancient traditions widely
-  associated nine with a threshold quality: the Styx had nine twists
-  separating the living from the dead; Welsh law measured distances in
-  units of nine steps; Islamic cosmology arranged the universe across
-  nine spheres. Nine carries the weight of everything that must be
-  traversed before the great completion of Ten. This date stands at
-  that threshold -- gathering what the journey has accumulated, just
-  before the cycle reaches its fullness.
+  Tet -- the serpent, gematria value 9, the last of the single-digit
+  letters. Gematria's own worked example lands here: emet, truth (aleph
+  + mem + tav = 441), reduces to 9 -- and so does emet repeated twice
+  or three times. The Hanukkah menorah carries nine branches. This date
+  asks what remains true once everything else has been reduced away.
 
 ------------------------------------------------------------------------
-  SYNTHESIS (GREEK ⊕ HEBREW STANDARD)  —  8  ·  The Transcendent Eight
+  SYNTHESIS (GREEK ⊕ HEBREW BONE'EH)  —  4  ·  The Just Foundation
 ------------------------------------------------------------------------
 
-  The Greek Pythagorean value (4) and the Hebrew Standard value (4,
-  reduced to 4) are combined and reduced to a single synthesis number:
-  8.
+  The Greek Pythagorean value (4) and the Hebrew Bone'eh value (9) are
+  combined and reduced to a single synthesis number: 4. Bone'eh is the
+  Hebrew partner because it is the only Hebrew method here whose digit
+  can differ from the Greek one -- Methods 2-4 always reduce to the
+  same digit as Method 1.
 
-  The auspicious Ogdoad -- the number of divine fullness above the
-  seven planetary spheres, rooted in Babylonian cosmology's eighth
-  realm of the fixed stars where the gods resided -- meets Het, the
-  enclosure that becomes a gate beyond the natural order. Both
-  traditions consecrate Eight as the number that exceeds the sevenfold
-  cycle: ancient cosmology placed divine fullness at the eighth level;
-  Jewish tradition marks the eighth day of life with the covenant of
-  circumcision. This date opens the gate at the edge of what is
-  ordinary.
+  The Pythagorean number of justice meets Dalet, the humble door -- and
+  a day of serious, right-ordered building presents itself. The Greeks
+  explicitly named Four the number of justice: balanced, four-square,
+  impartially structured. Hebrew tradition humbled Four into a
+  threshold requiring surrender. Both traditions call for the same
+  thing: build with integrity, hold the line of what is right, do so
+  without pride or demand for recognition. This is a day for
+  irreversible work.
 ```
 
 ---
 
 ## Understanding Your Numbers
 
+### The Date in Hebrew Numerals
+
+Hebrew writes numbers with letters — the first evidence dates to 78 BCE, and the Hasmonean king Alexander Jannaeus marked the 20th and 25th years of his reign with כ and כה (Gematria, Wikipedia). Methods 2 and 3 apply gematria to these letters:
+
+| Number | Letters | Values |
+|--------|---------|--------|
+| 2 | ב׳ | Bet 2 |
+| 28 | כ״ח | Kaf 20 + Het 8 |
+| 2026 | ב׳כ״ו | Bet 2000 + Kaf 20 + Vav 6 |
+
+* Units are Aleph–Tet (1–9), tens Yod–Tsadi (10–90), hundreds Kof–Tav (100–400); 500–900 are built from Tav (700 = Tav + Shin).
+* Thousands use an ordinary letter that then "signifies not 1, but 1000" (Mathers Table).
+* 15 and 16 are written Tet + Vav (9 + 6) and Tet + Zayin (9 + 7), never Yod + He or Yod + Vav, which spell part of the divine name. This is standard Hebrew practice but is not described in the source documents.
+
 ### How Each Method Calculates
 
-All five methods start from the same three date components — month, day, and year — but differ in how they process and combine those values. A shared utility throughout is **digit reduction**: repeatedly summing the digits of a number until a single digit (1–9) remains.
+Methods 2–4 reduce their totals by *mispar katan mispari* — repeatedly summing digits until one digit remains — and stop at the first **sacred number** the reduction reaches: **13, 18, 26, 32, 36, 40, 49, 50, 70**.
+
+**Methods 1–4 always share the same final digit.** Summing digits never changes a number's remainder when divided by 9, so however a method groups the date's digits, it reduces to the same digit. Gematria Wikipedia says this of mispar katan mispari: "The same value will be arrived at regardless of whether it is the absolute values, the ordinal values, or the reduced values that are being counted." The methods differ only in the sacred numbers their totals pass through on the way down. Bone'eh (Method 5) weights the components by position, so it is the one method whose digit can differ.
 
 ---
 
-### Method 1 · Greek Pythagorean (Isopsephy)
+### Method 1 · Greek Pythagorean
 
-Each component is reduced individually to a single digit, then the three reduced values are summed and reduced again to produce the final number.
+Each component is reduced to a single digit, then the three are summed and reduced again.
 
-- Month: reduced to a single digit
-- Day: reduced to a single digit
-- Year: all digits summed, then reduced to a single digit
-- Final: the three reduced values are summed and reduced once more
+**Example for February 28, 2026:** month 2 → **2**; day 28 → 10 → **1**; year 2026 → 10 → **1**; 2 + 1 + 1 = **4**
 
-**Example for February 28, 2026:**
-- Month: 2 → **2**
-- Day: 28 → 2+8 = **10** → 1+0 = **1**
-- Year: 2026 → 2+0+2+6 = **10** → 1+0 = **1**
-- Raw Sum: 2+1+1 = 4 → **4**
+This is the modern numerology convention, not ancient Greek isopsephy. Isopsephy kept raw totals unreduced — the name of Jesus in Greek is 888, and a Pompeii graffito reads "I love the girl whose name is phi mu epsilon (545)".
 
 ---
 
 ### Method 2 · Hebrew Standard (Mispar Hechrachi)
 
-Uses the identical arithmetic as Method 1, but preserves certain sacred sums before any final reduction. If the raw sum equals **13** (Echad / divine unity), **18** (Chai / life), or **26** (YHVH / the divine name), that value is kept as-is rather than reduced further.
+*Mispar hechrachi* (absolute value) gives every letter its full standard value. A number written in Hebrew numerals therefore has itself as its absolute value, so the total is month + day + year.
 
-> Note: 36 (Lamed-Vav) is the traditional fourth sacred value but is unreachable via three components each reduced to 1–9 (maximum raw sum = 27), so it is not preserved in this method.
-
----
-
-### Method 3 · Mispar Katan (All-Digits Sum)
-
-The full date is expressed as the string `MMDDYYYY` (zero-padded), and every individual digit is summed directly — no intermediate component reduction. Zeros are present but contribute nothing to the total, in keeping with the documented principle that this method "truncates all of the zeros."
-
-An expanded set of sacred sums is preserved before final reduction: **13, 18, 26, 36, 40, 49, 50, 70**. These reflect values reachable by this method's larger raw totals and their documented significance in Jewish tradition (Flood and Sinai: 40; the Omer count: 49; Jubilee year: 50; the seventy nations / Sanhedrin: 70).
-
-**Example for February 28, 2026:**
-- Date string: `02282026`
-- Digits: 0+2+2+8+2+0+2+6 = **22** → 2+2 = **4**
+**Example for February 28, 2026:** 2 + 28 + 2026 = 2056 → 2 + 0 + 5 + 6 = **13** ★ (Echad — preserved)
 
 ---
 
-### Method 4 · Full Component (Mispar Gadol-Inspired)
+### Method 3 · Mispar Katan (Small Value)
 
-Month and day are used at their full, unreduced face value. The year's digits are summed to their total but *not* pre-reduced. The three values are then summed and reduced. The same expanded sacred set (13, 18, 26, 36, 40, 49, 50, 70) is preserved before final reduction.
+*Mispar katan* "calculates the value of each letter, but truncates all of the zeros": Kaf (20) counts 2, Tav (400) counts 4, Bet-as-2000 counts 2. For a date this equals the sum of its digits, except that 15 and 16 (Tet + Vav, Tet + Zayin) count 15 and 16 rather than 6 and 7.
 
-Inspired by *mispar gadol*, in which certain Hebrew letters retain larger values rather than being collapsed, this method preserves the fuller magnitudes of month and day.
+**Example for February 28, 2026:** Bet 2 | Kaf 2 + Het 8 | Bet 2 + Kaf 2 + Vav 6 = 22 → **4**
 
-**Example for February 28, 2026:**
-- Month: **2** (unreduced)
-- Day: **28** (unreduced)
-- Year digit sum: 2+0+2+6 = **10** (not pre-reduced)
-- Raw Sum: 2+28+10 = 40 ★ (sacred — preserved)
+---
+
+### Method 4 · Full Component
+
+Month and day keep their full value; the year contributes its digit sum without being pre-reduced. This is an adaptation rather than a documented gematria method: a hybrid of the absolute value (month, day) and the small value (year). Its mid-sized totals are where 40, 49, 50 and 70 can appear.
+
+**Example for February 28, 2026:** 2 + 28 + 10 = **40** ★ (Forty — preserved)
+
+Earlier versions called this "Mispar Gadol-inspired". Mispar gadol differs from the standard values only for the five final letter forms (500–900), which never occur in a date, so the name was dropped.
 
 ---
 
 ### Method 5 · Bone'eh (Building Value)
 
-Each date component is first reduced to a single digit (as in Method 1). The *bone'eh* formula then treats the three reduced values as sequential "letters" and builds cumulatively: at each step, the running total is increased by the sum of all original component values seen so far *plus* the current component value. This makes earlier components carry greater weight.
-
-For components **m** (month), **d** (day), **y** (year), all reduced:
+Each component is first reduced to a single digit (as in Method 1). *Mispar bone'eh* then walks through the "letters" adding, at each step, the sum of all original values so far — Gematria Wikipedia's example is *achad* = 1 + (1+8) + (1+8+4) = 23. Earlier components therefore carry more weight.
 
 | Step | Running total | Weight |
 |------|--------------|--------|
@@ -244,18 +265,15 @@ For components **m** (month), **d** (day), **y** (year), all reduced:
 | Day | 2m + d | 2× |
 | Year | 3m + 2d + y | 1× |
 
-The final step value (3m + 2d + y) is then reduced to a single digit.
-
-**Example for February 28, 2026** (m=2, d=1, y=1):
-- Step 1: 0 + 2 = **2**
-- Step 2: 2 + (2+1) = **5**
-- Step 3: 5 + (2+1+1) = **9** → **9**
+**Example for February 28, 2026** (m=2, d=1, y=1): 2 → 2 + 3 = 5 → 5 + 4 = **9**
 
 ---
 
-### Synthesis (Greek ⊕ Hebrew Standard)
+### Synthesis (Greek ⊕ Hebrew Bone'eh)
 
-The Greek Pythagorean value (Method 1) and the Hebrew Standard value (Method 2, reduced to a single digit if it is a preserved sacred number) are summed and reduced to produce a single synthesis number. This combined reading reveals how the Greek and Hebrew energies of the date interact.
+The Greek Pythagorean value (Method 1) and the Hebrew Bone'eh value (Method 5) are summed and reduced. Bone'eh is the Hebrew partner because Methods 2–4 always reduce to the same digit as Method 1; earlier versions paired Method 1 with Method 2, which always produced Method 1 doubled.
+
+**Example for February 28, 2026:** 4 + 9 = 13 → **4**
 
 ---
 
@@ -263,128 +281,132 @@ The Greek Pythagorean value (Method 1) and the Hebrew Standard value (Method 2, 
 
 ### Greek (Pythagorean) Numbers
 
-**1 - The Monad**
-Unity and the source of all numbers. The Pythagoreans did not consider 1 a number at all — it was the singular origin from which every other number is generated. It changed odd to even and even to odd, belonging fully to neither.
+**1 - The Monad**  
+The Monad -- unity and the origin of all things. The Pythagoreans did not consider 1 to be a number at all, because number implies plurality; instead, it was the singular source from which every other number is generated. This date vibrates with absolute first-cause energy: the singular, undivided originating impulse before multiplicity was born, the ground zero from which everything else proceeds.
 
-**2 - The Dyad (Female Principle)**
-The first even number and the first expression of the feminine in Pythagorean tradition, where all even numbers were female and all odd numbers male. Two introduced duality, polarity, and the possibility of otherness.
+**2 - The Dyad — Female Principle**  
+The Dyad -- the female principle, the first even number, and the first departure from unity. The Pythagoreans held all even numbers to be female and all odd numbers male; Two embodied the feminine principle and introduced the possibility of polarity. This date carries the energy of receptivity, reflection, and the relational power that requires another to complete it.
 
-**3 - The Triad (Male Principle)**
-The first odd number beyond unity and the masculine impulse of creation. Plato saw Three as the triangle — the simplest shape possible in space — from which all visible form is constructed.
+**3 - The Triad — Male Principle**  
+The Triad -- the male principle, the first odd number generated from unity. Plato saw Three as the triangle -- the simplest shape possible in space, from which all visible form is constructed. This date moves with active, initiating energy: the assertion of form into the void, the first articulation of structure in the world.
 
-**4 - The Tetrad (Justice)**
-Explicitly documented: "The number 4 represented justice" in Pythagorean tradition. Four encodes the four elements, four seasons, and four cardinal directions, and generates the most perfect number through 1+2+3+4=10.
+**4 - The Tetrad — Justice**  
+The Tetrad -- justice and the order of the material world. The Pythagoreans explicitly held that Four represented justice: balanced, four-square, and impartially structured. It is the seed of the most perfect number because 1+2+3+4=10. This date calls for honest reckoning and right measure -- and the patient building of structures that will hold because they are just.
 
-**5 - The Pentad (Marriage)**
-Marriage as the sum of the female Two and the male Three. Five symbolizes human life and the sacred union of opposites. The pentagram was associated in antiquity with the Babylonian goddess Ishtar and her Roman parallel Venus.
+**5 - The Pentad — Marriage**  
+The Pentad -- marriage and human life, the sacred union of the female Two and the male Three. Five symbolizes marriage because it is the sum of the first female number (2) and the first male number (3): even and odd joined in one. It also represents the five fingers and the five extremities of the human body. This date pulses with the vitality of the fully human -- embodied, relational, alive precisely at the intersection of opposites.
 
-**6 - The Hexad (Perfection)**
-The first perfect number: Six is both the sum (1+2+3) and the product (1×2×3) of the first three numbers, and equals the sum of its own divisors. The six days of Creation in Genesis mirror this mathematical completeness.
+**6 - The Hexad — Perfection**  
+The Hexad -- the first perfect number, displaying a remarkable mathematical coincidence: Six is both the sum (1+2+3) and the product (1x2x3) of the first three numbers. The six days of Creation in Genesis mirror this structure. This date carries the quiet completeness of things that are exactly as they should be.
 
-**7 - The Heptad**
-The union of the spiritual Three and the material Four — the number that bridges higher and lower orders of existence. Seven gives the days of the week their structure and there are seven distinct notes in the musical scale.
+**7 - The Heptad**  
+The Heptad -- seven as the union of the spiritual Three and the material Four: the number that bridges the higher and lower orders of existence. Seven gives the days of the week their structure, and there are seven distinct notes in the musical scale, a pattern the Pythagoreans found deeply significant given their discovery that musical harmony obeys whole-number ratios. Seven visible planets named the days of the week across many ancient cultures. This date opens a space of stillness and high perception -- the kind of knowing that comes not from activity but from patient observation of what is already circling.
 
-**8 - The Ogdoad (Auspicious Fullness)**
-Generally considered auspicious, and the number of divine fullness above the seven planetary spheres. In Babylonian cosmology an eighth realm — the fixed stars — sat above the seven planetary spheres, where the gods resided. The Greek name of Jesus (Iesous) sums to 888 in isopsephy.
+**8 - The Ogdoad — Auspicious Fullness**  
+The Ogdoad -- generally considered auspicious, and the number of divine fullness above the seven planetary spheres. In Babylonian cosmology there were seven spheres of planets, and above them an eighth realm -- the fixed stars -- where the gods themselves resided. Eight is therefore the number of what lies beyond ordinary cycles. The Greek name of Jesus (Iesous) sums to 888 in isopsephy, three repetitions of 8. This date carries an energy of passage into a realm above the sevenfold structure.
 
-**9 - The Ennead (Boundary of the Decade)**
-The last single digit, standing at the boundary before Ten, the Pythagorean most perfect number. Ancient traditions widely associated nine with threshold quality: the Styx had nine twists, Islamic cosmology arranged the universe across nine spheres, and Welsh law measured distances in units of nine steps.
+**9 - The Ennead — Boundary of the Decade**  
+The Ennead -- the last single digit, standing at the boundary before Ten, the Pythagorean most perfect number. Ancient traditions widely associated nine with a threshold quality: the Styx had nine twists separating the living from the dead; Welsh law measured distances in units of nine steps; Islamic cosmology arranged the universe across nine spheres. Nine carries the weight of everything that must be traversed before the great completion of Ten. This date stands at that threshold -- gathering what the journey has accumulated, just before the cycle reaches its fullness.
 
 ---
 
 ### Hebrew (Gematria) Numbers
 
-**1 - Aleph (Ox)**
-Gematria value: 1. Nearly silent, requiring a vowel to be heard. Judaism's foundational declaration, the Shema, centers on the Oneness of God — "the Lord is one." This date breathes with that primordial singular unity.
+Letter meanings follow the Mathers Table (*The Kabbalah Unveiled*, 1887).
 
-**2 - Bet (House)**
-Gematria value: 2. The Torah begins with Bet — *Bereishit*, "In the beginning" — because all of creation is envisioned as a dwelling. Pairs permeate Jewish life: two Shabbat candles, two challahs, the two tablets of the Ten Commandments.
+**1 - Aleph — Ox**  
+Aleph -- whose literal form means Ox. Its gematria value of 1 speaks directly to the core of Jewish theology: the Oneness of God declared in the Shema -- 'Hear O Israel, the Lord is our God, the Lord is one.' This date breathes with that primordial singular unity: the undivided source before any word.
 
-**3 - Gimel (Camel)**
-Gematria value: 3. The three patriarchs — Abraham, Isaac, and Jacob — and the three pilgrimage festivals — Passover, Shavuot, and Sukkot. Gimel is the camel that carries gifts across great distances without stopping.
+**2 - Bet — House**  
+Bet -- the house. Pairs permeate Jewish life: two candles are lit at the start of Shabbat, two challahs sit on the table, two tablets held the Ten Commandments, and Noah's animals entered the ark two by two. This date resonates with covenantal relationship and the sacred home built only in partnership.
 
-**4 - Dalet (Door)**
-Gematria value: 4. The four matriarchs — Sarah, Rebecca, Rachel, and Leah — and the four cups of wine at Passover. Four describes the shape of the world: four rivers from Eden, four cardinal winds.
+**3 - Gimel — Camel**  
+Gimel -- the camel, the animal that travels great distances carrying what others need. Judaism was born in three generations: the three patriarchs Abraham, Isaac, and Jacob. Three pilgrimage festivals structure the Jewish year, each a journey to remember who you are. This date moves with purposeful carrying -- the generosity that keeps traveling forward, bearing gifts, refusing to stop short.
 
-**5 - He (Window)**
-Gematria value: 5. He appears twice in the Tetragrammaton (YHVH), the most sacred Name. The Torah unfolds in five books. The hamsa talisman with its five fingers invokes this number as protection.
+**4 - Dalet — Door**  
+Dalet -- the door, the threshold that marks an entrance. Four structures Jewish life at its foundations: the four matriarchs Sarah, Rebecca, Rachel, and Leah; and the four cups that frame the Passover seder, along with the Four Questions and Four Sons. Four also describes the shape of the world: four rivers flowed from Eden, four winds blow from four directions. This date stands at a threshold that opens in every direction at once.
 
-**6 - Vav (Peg, Nail)**
-Gematria value: 6. The fastener that holds things together. In biblical Hebrew, the *vav*-consecutive prefix transforms tenses — past into future, future into past — joining all time into one living moment. Connected to *tikkun* (repair/restoration).
+**5 - He — Window**  
+He -- the window: the opening through which light and breath pass between inner and outer worlds. He appears twice in the Tetragrammaton (YHVH), the most sacred Name, framing Yod and Vav on both sides. The Torah unfolds in five books. The hamsa, shaped like a five-fingered hand, guards those who carry it. This date opens a window: what was hidden may now be seen.
 
-**7 - Zayin (Weapon, Sword)**
-Gematria value: 7. "All the sevenths are always beloved" (*Leviticus Rabbah* 29:11). Shabbat is the seventh day; the shmita is the seventh year; seven blessings are recited at every wedding; the Temple menorah had seven branches.
+**6 - Vav — Peg, Nail**  
+Vav -- the peg and nail, the fastener that holds things together. Six days of creation preceded Shabbat; Vav is the energy of active connection and building. In Lurianic Kabbalah, the great work of tikkun (cosmic restoration) is carried out not through ease but through unceasing struggle against evil and an intensely lived mystical life. This date calls for the work of fastening: sustained effort that holds things in place.
 
-**8 - Het (Enclosure, Fence)**
-Gematria value: 8. Jewish boys are circumcised on the eighth day of life. Hanukkah burns for eight nights. Eight is the day beyond the seven-day natural cycle, associated with covenant, transcendence, and what lies beyond the ordinary.
+**7 - Zayin — Weapon, Sword**  
+Zayin -- whose literal form is weapon or sword, yet which carries in Jewish tradition the highest crown of sacred completion. An ancient midrash from Leviticus Rabbah declares: 'All the sevenths are always beloved' -- the seventh day, the seventh year (shmita), the seven blessings at every wedding, the seven-branched menorah in the Temple. This date is crowned with the gift that cannot be forced: stop striving, receive what is complete.
 
-**9 - Tet (Serpent)**
-Gematria value: 9. The first letter of *Tov* (good), its coiling shape concealing goodness within rather than displaying it outwardly. *Tov* first appears in Torah on the third day of creation. Nine carries the energy of concealed blessing.
+**8 - Het — Enclosure, Fence**  
+Het -- the enclosure and fence, a boundary that marks the edge of ordinary space. Yet in Jewish tradition, eight is the number that crosses into covenant: circumcision on the eighth day of life marks the child's entry into the covenant of Abraham. Eight comes after the complete seven-day cycle, belonging to the order beyond the natural. This date opens a gate at the edge of the ordinary.
 
-**13 - Echad (One) and Divine Mercy** *(Sacred — preserved before reduction)*
-Gematria: Aleph (1) + Het (8) + Dalet (4) = 13, the value of *Echad* (One). The 13 attributes of divine mercy are recited on the High Holidays. Thirteen is also the age of Bar Mitzvah and the count of Maimonides' principles of faith.
+**9 - Tet — Serpent**  
+Tet -- the serpent, gematria value 9, the last of the single-digit letters. Gematria's own worked example lands here: emet, truth (aleph + mem + tav = 441), reduces to 9 -- and so does emet repeated twice or three times. The Hanukkah menorah carries nine branches. This date asks what remains true once everything else has been reduced away.
 
-**18 - Chai (Life)** *(Sacred — preserved before reduction)*
-Gematria: Het (8) + Yod (10) = 18, the Hebrew word for *life*. Perhaps the most famous gematria in living Jewish practice: gifts are given in multiples of 18 as acts of blessing. The central prayer, the Amidah, is still called *Shemonah Esreh* (The Eighteen).
+**13 - Thirteen — Echad (Divine Unity & Mercy)** *(sacred — preserved before reduction)*  
+Thirteen -- the gematric value of Echad (One): Aleph (1) + Het (8) + Dalet (4) = 13. God is declared One in the Shema, and thirteen is the number through which that Oneness expresses its mercy: the 13 attributes of divine compassion recited on the High Holidays are the face God turns toward those who have strayed. Thirteen is also the age of Bar Mitzvah -- when a boy becomes responsible for all 613 mitzvot. This date vibrates with the mercy of the One who counts every soul as infinitely precious.
 
-**26 - YHVH (The Divine Name)** *(Sacred — preserved before reduction)*
-Gematria: Yod (10) + He (5) + Vav (6) + He (5) = 26. The numerical signature of the Tetragrammaton — so sacred it is not spoken aloud and is replaced in prayer by *Adonai* or *HaShem*.
+**18 - Eighteen — Chai (Life)** *(sacred — preserved before reduction)*  
+Eighteen -- Chai: Het (8) + Yod (10) = 18, the Hebrew word for life itself. This is perhaps the most famous example of gematria in living Jewish practice: gifts are given in multiples of 18 ($18, $180) as an act of blessing. The central prayer, the Amidah, is still called the Shemonah Esreh (The Eighteen) after its original 18 blessings, though it has 19 today. This date is saturated with life-force -- the sacred, irreducible gift of being alive and present in this moment.
 
-**36 - The Lamed-Vav (Hidden Righteous)** *(Sacred — preserved before reduction; Methods 3 & 4 only)*
-Gematria: Lamed (30) + Vav (6) = 36. A Hasidic teaching holds that in every generation exactly 36 hidden righteous ones (*tzadikim nistarim*) sustain the world. Also 2 × Chai (2 × 18). This value can only appear via Methods 3 or 4, where raw sums can exceed 27.
+**26 - Twenty-Six — The Divine Name (YHVH)** *(sacred — preserved before reduction)*  
+Twenty-six -- the sum of the four letters of the divine Name: Yod (10) + He (5) + Vav (6) + He (5) = 26. The Tetragrammaton (YHVH) is the personal name of God in Hebrew Scripture -- the four-letter Name whose numerical signature is 26. In Sephardic tradition the tzitzit fringes are wound 10, 5, 6 and 5 times between their five knots -- the letters of this Name, totalling 26. A date carrying 26 holds the quiet weight of divine presence: not dramatic, simply here.
 
-**40 - Forty** *(Sacred — preserved before reduction; Methods 3 & 4 only)*
-Radical transformation: forty days and nights of the Flood; forty years in the desert; Moses on Sinai for forty days.
+**32 - Thirty-Two — The Paths of Secret Wisdom** *(sacred — preserved before reduction)*  
+Thirty-two -- the 32 paths of secret wisdom: the ten sefirot, the divine numbers or emanations through which God creates, joined with the 22 letters of the Hebrew alphabet. Sefer Yetzira taught that the world was made from exactly these: number and letter together, the same marriage that gematria itself depends on. A date carrying 32 sits where counting and naming meet -- a day for understanding how things are put together, not only what they are.
 
-**49 - Seven × Seven** *(Sacred — preserved before reduction; Methods 3 & 4 only)*
-The Omer count — the forty-nine days counted between Passover and Shavuot, culminating in the fiftieth day of revelation.
+**36 - Thirty-Six — The Lamed-Vav (Hidden Righteous)** *(sacred — preserved before reduction)*  
+Thirty-six -- Lamed (30) + Vav (6) = 36: the number of the hidden righteous ones, the lamed vavniks. A Hasidic teaching holds that in every generation there are exactly 36 tzadikim nistarim -- hidden righteous people whose identities are unknown, yet on account of whose goodness the world is not destroyed. Thirty-six is also twice Chai (2x18). This date draws near the consciousness of anonymous goodness: the kind that asks nothing and sustains everything.
 
-**50 - Jubilee (Yovel)** *(Sacred — preserved before reduction; Methods 3 & 4 only)*
-The Jubilee year, declared on the fiftieth year: slaves were freed, debts released, and land returned to its original families.
+**40 - Forty — The Great Transformation** *(sacred — preserved before reduction)*  
+Forty -- the number of radical and irreversible transformation in Hebrew Scripture. God sent forty days of rain before the world was renewed through Noah. Moses spent forty days on Sinai, absent from the human world, to receive the Torah whole. The Israelites spent forty years in the wilderness -- not as punishment alone, but as the time required for a generation shaped by slavery to give way to a generation born in freedom. A date bearing forty asks: what must be dissolved completely before the new world can be entered?
 
-**70 - Seventy Nations / Sanhedrin** *(Sacred — preserved before reduction; Methods 3 & 4 only)*
-The seventy nations of the world (Table of Nations, Genesis 10), the seventy elders of the Sanhedrin, and the seventy faces of Torah.
+**49 - Forty-Nine — Seven Times Seven (The Omer)** *(sacred — preserved before reduction)*  
+Forty-nine -- seven times seven, the full count of the Omer: the 49 days of active preparation that stretch between Passover (liberation from Egypt) and Shavuot (revelation of Torah at Sinai). To count forty-nine is to move through every day of that period of preparation -- to have traveled the full distance between liberation and revelation. This date stands at the completion of that great journey, with the fiftieth day already waiting at the threshold.
+
+**50 - Fifty — The Jubilee (Yovel)** *(sacred — preserved before reduction)*  
+Fifty -- the Jubilee: the year that arrives after seven sevens, when the entire social order is reset. Slaves go free, debts are forgiven, land returns to its original families. Fifty does not merely conclude the forty-nine; it exceeds the count entirely, arriving at a new kind of time that the counting itself could not contain. And fifty is also Shavuot -- the day revelation descended from Sinai, the gift that no preparation fully earns but only readiness can receive. This date carries the quality of liberation that reorders everything.
+
+**70 - Seventy — The Fullness of the World** *(sacred — preserved before reduction)*  
+Seventy -- the fullness of the world. Jewish tradition holds that there are exactly 70 nations and 70 languages in the world: seventy is the complete accounting of human diversity, the number at which nothing is left out. The Sanhedrin, the supreme Jewish court of 70 sages, embodied this universality in its judgments. And seventy is the full span of a human life -- the years granted to King David. A date carrying seventy touches the whole of things: not one fragment, not one perspective, but the complete circle of human experience held at once.
 
 ---
 
 ### Combined Numbers (Synthesis)
 
-**1 - The Sovereign Origin**
-Where the Pythagorean Monad meets the Aleph of Hebrew tradition: a date of absolute originating power, the ground from which all else proceeds.
+**1 - The Sovereign Origin**  
+Where the Pythagorean Monad -- unity, the source from which all numbers are generated -- meets the Aleph of Hebrew tradition -- the Oneness of God before all speech -- a date of absolute originating power emerges. Both traditions agree: One is not a quantity but a quality, the ground from which all else proceeds. This is a day to act from first principles, to begin what has never existed before, to trust that singular clarity of purpose is the most powerful force in the world.
 
-**2 - The Sacred Pairing**
-The Pythagorean female principle meets the Bet of the house: a day of sacred duality and covenantal relationship.
+**2 - The Sacred Pairing**  
+The Pythagorean female principle meets the Bet of the house, and a day of sacred duality and dwelling emerges. Greek tradition gave Two the feminine -- receptive, relational, the first to depart from unity into otherness. Hebrew tradition built a house with Two as its first letter, because creation itself is a dwelling between God and humanity. The gift of this date belongs entirely to those willing to share it.
 
-**3 - The Active Completion**
-The Pythagorean male principle meets Gimel's tireless generosity: a day of purposeful forward movement and delivery.
+**3 - The Active Completion**  
+The Pythagorean male principle -- active, generative, the first odd force beyond unity -- meets Gimel's tireless camel-generosity, and a day of purposeful forward movement takes shape. Three in Greek tradition was the masculine impulse that gives form to the void; three in Hebrew tradition is the three patriarchs and three festivals that define a people's journey. This date asks for purposeful action: carry what you have been given, travel the full distance, and deliver it without stopping short.
 
-**4 - The Just Foundation**
-The Pythagorean number of justice meets Dalet, the humble door: a day for building with integrity and without pride.
+**4 - The Just Foundation**  
+The Pythagorean number of justice meets Dalet, the humble door -- and a day of serious, right-ordered building presents itself. The Greeks explicitly named Four the number of justice: balanced, four-square, impartially structured. Hebrew tradition humbled Four into a threshold requiring surrender. Both traditions call for the same thing: build with integrity, hold the line of what is right, do so without pride or demand for recognition. This is a day for irreversible work.
 
-**5 - The Living Marriage**
-The Pythagorean number of marriage meets He, the window of divine breath: a date alive precisely at the intersection of opposites.
+**5 - The Living Marriage**  
+The Pythagorean number of marriage -- the sacred union of the female Two and male Three -- meets He, the window of the divine Name breathed outward. In both traditions Five is alive at the intersection of opposites: the Pythagoreans saw it as human life itself, the sum and embodiment of the female 2 and male 3; the Hebrews encoded it in the divine Name and the five books of the Torah. This date is alive precisely at that crossing point -- fully human, fully open.
 
-**6 - The Perfect Repair**
-The first perfect number meets Vav, the connecting peg: a day of extraordinary completion, reconnection, and *tikkun* (repair).
+**6 - The Perfect Repair**  
+The first perfect number meets Vav, the connecting peg -- and a day of extraordinary completion takes shape. Six was perfect to the Greeks mathematically: sum and product and divisor-sum all coincide. In Hebrew tradition six days of creation precede Shabbat, and in Lurianic Kabbalah the work of tikkun (cosmic restoration) is the great ongoing act, carried out through unceasing struggle against evil and an intensely lived mystical life. This date calls for sustained, active effort -- the patient work of building toward what perfection was always intended to look like.
 
-**7 - The Beloved Crown**
-The Pythagorean seven of heavenly order meets the Hebrew seven that the midrash declares "always beloved": the most universally sacred of all numbers asserting itself across both traditions.
+**7 - The Beloved Crown**  
+The Pythagorean seven of heavenly order meets the Hebrew seven that the midrash declares 'always beloved' -- and the most universally sacred of all numbers asserts itself across both traditions. Many ancient cultures recognized seven visible planets that named the days of the week; Israel rested on the seventh day and recited seven blessings at every wedding. A date vibrating at Seven carries a single clear instruction: stop, receive. The gift that belongs to this day does not come to those who pursue it -- only to those still enough to notice it.
 
-**8 - The Transcendent Eight**
-The Pythagorean Ogdoad meets Het, the enclosure that becomes a gate: a date that opens at the edge of the ordinary, where something becomes possible that could not be possible on any other day.
+**8 - The Transcendent Eight**  
+The auspicious Ogdoad -- the number of divine fullness above the seven planetary spheres, rooted in Babylonian cosmology's eighth realm of the fixed stars where the gods resided -- meets Het, the enclosure that becomes a gate beyond the natural order. Both traditions consecrate Eight as the number that exceeds the sevenfold cycle: ancient cosmology placed divine fullness at the eighth level; Jewish tradition marks the eighth day of life with the covenant of circumcision. This date opens the gate at the edge of what is ordinary.
 
-**9 - The Great Return**
-The Pythagorean Ennead — the number that always returns to itself — meets Tet, the serpent coiled around hidden goodness: a date at the horizon of the cycle, asking what concealed gift is finally ready to be seen.
+**9 - The Great Threshold**  
+The Ennead -- standing at the boundary before Ten, the most perfect Pythagorean number -- meets Tet, the serpent. Nine marks the last step before the great completion: ancient traditions across cultures placed threshold imagery at nine (the nine-twist Styx, the nine steps of Welsh law, the nine spheres of Islamic cosmology). This date stands at that threshold -- everything has been accumulated, the full count nearly complete, the next cycle waiting just beyond the edge of the visible.
 
 ---
 
 ## Sources
 
-Number attributions verified against:
-- Gematria (Wikipedia)
-- Gematria | Britannica
-- Significant Numbers in Judaism | My Jewish Learning
-- Numerology (Wikipedia)
-- Mathers Table of Hebrew & Chaldee Letters (*The Kabbalah Unveiled*, 1887)
+* Gematria (Wikipedia) — letter values, Hebrew numerals, mispar hechrachi, katan, katan mispari and bone'eh
+* Numerology (Wikipedia) — the Pythagorean method
+* Number symbolism: Pythagoreanism and cultural associations of numbers (Britannica)
+* Kabbala (Britannica) — Sefer Yetzira's 32 paths; Lurianic *tiqqun*
+* Significant numbers in Judaism (My Jewish Learning)
+* Mathers Table of Hebrew and Chaldee Letters (*The Kabbalah Unveiled*, 1887)
 
-Hebrew reduction method: *mispar katan mispari* (integral reduced value) — the total gematric value is reduced to a single digit by repeatedly summing its digits. Sacred sums are preserved before this final reduction where documented.

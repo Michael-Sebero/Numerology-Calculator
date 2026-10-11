@@ -1,7 +1,16 @@
 #!/usr/bin/env python3
 
+import calendar
+import re
+import unicodedata
+
+
 def get_letter_value(letter):
-    """Convert letter to numerological value using Pythagorean system"""
+    """Convert letter to numerological value using Pythagorean system.
+
+    Equivalent to the digit-reduced ordinal cipher (A=1 ... Z=26) that
+    Britannica describes for arithmomancy: J=10 -> 1, S=19 -> 1, Z=26 -> 8.
+    """
     letter_values = {
         'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6, 'G': 7, 'H': 8, 'I': 9,
         'J': 1, 'K': 2, 'L': 3, 'M': 4, 'N': 5, 'O': 6, 'P': 7, 'Q': 8, 'R': 9,
@@ -21,64 +30,80 @@ def reduce_to_single_digit(number):
     
     return number
 
+def parse_birth_date(birth_date):
+    """Parse MM-DD-YYYY or MM/DD/YYYY, rejecting dates that don't exist"""
+    parts = re.split(r'[-/]', birth_date.strip())
+    try:
+        month, day, year = (int(p) for p in parts)
+    except ValueError:
+        raise ValueError("Invalid date format. Please use MM-DD-YYYY or MM/DD/YYYY")
+    if not 1 <= month <= 12:
+        raise ValueError("Month must be 1-12")
+    if not 1 <= year <= 9999:
+        raise ValueError("Year must be 1-9999")
+    days_in_month = calendar.monthrange(year, month)[1]
+    if not 1 <= day <= days_in_month:
+        raise ValueError(f"Day must be 1-{days_in_month} for that month")
+    return month, day, year
+
 def calculate_life_path(birth_date):
     """Calculate Life Path number from birth date"""
-    try:
-        # Parse the date (MM-DD-YYYY or MM/DD/YYYY)
-        if '-' in birth_date:
-            parts = birth_date.split('-')
-        elif '/' in birth_date:
-            parts = birth_date.split('/')
-        else:
-            raise ValueError("Invalid date format")
-        
-        month, day, year = int(parts[0]), int(parts[1]), int(parts[2])
-        
-        # Reduce each part separately first
-        reduced_month = reduce_to_single_digit(month)
-        reduced_day = reduce_to_single_digit(day)
-        
-        # Reduce year by adding all digits first, then reducing
-        year_sum = sum(int(digit) for digit in str(year))
-        reduced_year = reduce_to_single_digit(year_sum)
-        
-        # Add the three reduced parts and reduce again
-        total = reduced_month + reduced_day + reduced_year
-        return reduce_to_single_digit(total)
-        
-    except (ValueError, IndexError):
-        raise ValueError("Invalid date format. Please use MM-DD-YYYY or MM/DD/YYYY")
+    month, day, year = parse_birth_date(birth_date)
+    
+    # Reduce each part separately first
+    reduced_month = reduce_to_single_digit(month)
+    reduced_day = reduce_to_single_digit(day)
+    
+    # Reduce year by adding all digits first, then reducing
+    year_sum = sum(int(digit) for digit in str(year))
+    reduced_year = reduce_to_single_digit(year_sum)
+    
+    # Add the three reduced parts and reduce again
+    total = reduced_month + reduced_day + reduced_year
+    return reduce_to_single_digit(total)
+
+def get_name_words(name):
+    """Split a name into words of plain A-Z letters.
+
+    Accents are removed first (José -> JOSE) so accented letters still
+    count; hyphens, apostrophes and spaces separate words.
+    """
+    decomposed = unicodedata.normalize('NFKD', name)
+    plain = ''.join(c for c in decomposed if not unicodedata.combining(c))
+    return re.findall(r'[A-Z]+', plain.upper())
+
+def is_y_vowel(word, i):
+    """Decide whether the Y at word[i] acts as a vowel.
+
+    Y is a consonant when it starts a word before a vowel (Young, Yolanda)
+    or follows a vowel (Floyd, Raymond); otherwise it is a vowel (Mary,
+    Lynn, Bryan, Yvonne).
+    """
+    vowel_letters = 'AEIOU'
+    if i == 0:
+        return len(word) == 1 or word[1] not in vowel_letters
+    return word[i-1] not in vowel_letters
 
 def get_vowels(name):
     """Extract vowels from name, including Y when used as vowel"""
     vowels = []
-    name = name.upper().replace(' ', '')
     vowel_letters = 'AEIOU'
     
-    for i, letter in enumerate(name):
-        if letter in vowel_letters:
-            vowels.append(letter)
-        elif letter == 'Y':
-            # Include Y if it's used as a vowel (simple heuristic)
-            # Y is typically a vowel when not at the beginning of a syllable
-            if i > 0 and name[i-1] not in vowel_letters:
+    for word in get_name_words(name):
+        for i, letter in enumerate(word):
+            if letter in vowel_letters or (letter == 'Y' and is_y_vowel(word, i)):
                 vowels.append(letter)
     
     return vowels
 
 def get_consonants(name):
-    """Extract consonants from name"""
+    """Extract consonants from name, including Y when used as consonant"""
     consonants = []
-    name = name.upper().replace(' ', '')
     vowel_letters = 'AEIOU'
     
-    for i, letter in enumerate(name):
-        if letter.isalpha() and letter not in vowel_letters:
-            if letter == 'Y':
-                # Include Y as consonant if at beginning or after vowel
-                if i == 0 or name[i-1] in vowel_letters:
-                    consonants.append(letter)
-            else:
+    for word in get_name_words(name):
+        for i, letter in enumerate(word):
+            if letter not in vowel_letters and not (letter == 'Y' and is_y_vowel(word, i)):
                 consonants.append(letter)
     
     return consonants
@@ -95,7 +120,7 @@ def calculate_soul_urge(name):
 
 def calculate_expression(name):
     """Calculate Expression number from all letters in name"""
-    name = name.upper().replace(' ', '')
+    name = ''.join(get_name_words(name))
     total = sum(get_letter_value(letter) for letter in name if letter.isalpha())
     return reduce_to_single_digit(total)
 
@@ -220,19 +245,32 @@ def get_middle_names():
     """Return combined list of popular middle names (for backward compatibility)"""
     return get_male_middle_names() + get_female_middle_names()
 
+def calculate_name_numbers(full_name):
+    """Calculate the profile components that depend on the name"""
+    return {
+        'soul_urge': calculate_soul_urge(full_name),
+        'expression': calculate_expression(full_name),
+        'personality': calculate_personality(full_name)
+    }
+
+def name_part_totals(name_part):
+    """Unreduced (vowel, all-letter, consonant) totals for one part of a name.
+
+    Vowels and consonants are decided word by word, so a full name's totals
+    are the sums of its parts' totals -- which lets the search add three
+    precomputed tuples instead of re-reading every full name.
+    """
+    return (
+        sum(get_letter_value(letter) for letter in get_vowels(name_part)),
+        sum(get_letter_value(letter) for letter in ''.join(get_name_words(name_part))),
+        sum(get_letter_value(letter) for letter in get_consonants(name_part))
+    )
+
 def calculate_numerology_profile(full_name, birth_date):
     """Calculate complete numerology profile for a name"""
-    life_path = calculate_life_path(birth_date)
-    soul_urge = calculate_soul_urge(full_name)
-    expression = calculate_expression(full_name)
-    personality = calculate_personality(full_name)
-    
-    return {
-        'life_path': life_path,
-        'soul_urge': soul_urge,
-        'expression': expression,
-        'personality': personality
-    }
+    profile = {'life_path': calculate_life_path(birth_date)}
+    profile.update(calculate_name_numbers(full_name))
+    return profile
 
 def has_master_number(profile, target_numbers=[11, 22, 33]):
     """Check if profile contains any master numbers"""
@@ -244,10 +282,28 @@ def has_master_number(profile, target_numbers=[11, 22, 33]):
 
 def find_master_number_names(birth_date, gender, last_name, target_numbers=[11, 22, 33], 
                            target_components=None, max_results=10, fixed_first_name=None):
-    """Find name combinations that result in master numbers"""
+    """Find name combinations that result in master numbers.
+
+    Every combination is checked, then the names with the most master
+    numbers are listed first (alphabetical within a tie).
+    """
     
     if target_components is None:
         target_components = ['life_path', 'soul_urge', 'expression', 'personality']
+    
+    # Life Path comes from the birth date alone, so no name can change it.
+    # Matching names on it would make every name (or no name) a match.
+    life_path = calculate_life_path(birth_date)
+    name_components = [c for c in target_components if c != 'life_path']
+    if 'life_path' in target_components:
+        if life_path in target_numbers:
+            print(f"Life Path {life_path} is a master number ✅ -- it comes from the birth date, so every name shares it.")
+        else:
+            print(f"Life Path {life_path} comes from the birth date, so no name can make it a master number.")
+        if not name_components:
+            print("Only Life Path was targeted, and names don't affect it -- nothing to search.")
+            return []
+        print(f"Ranking names on: {name_components}\n")
     
     # Get appropriate name lists
     if gender.lower() in ['male', 'm', 'boy']:
@@ -268,27 +324,35 @@ def find_master_number_names(birth_date, gender, last_name, target_numbers=[11, 
     
     results = []
     combinations_checked = 0
+    first_totals = {name: name_part_totals(name) for name in first_names}
+    middle_totals = {name: name_part_totals(name) for name in middle_names}
+    last_totals = name_part_totals(last_name)
     
-    print(f"Searching for names with master numbers {target_numbers} in components: {target_components}")
-    print(f"Checking {len(first_names)} first names × {len(middle_names)} middle names = {len(first_names) * len(middle_names)} combinations...")
+    print(f"Searching for names with master numbers {target_numbers} in components: {name_components}")
+    print(f"Checking {len(first_names)} first names × {len(middle_names)} middle names...")
     print("This may take a moment...\n")
     
     for first_name in first_names:
         for middle_name in middle_names:
-            if len(results) >= max_results:
-                break
-                
-            combinations_checked += 1
-            if combinations_checked % 1000 == 0:
-                print(f"Checked {combinations_checked} combinations, found {len(results)} matches so far...")
+            # Skip repeats such as "Aaron Aaron"
+            if middle_name.lower() == first_name.lower():
+                continue
             
+            combinations_checked += 1
             full_name = f"{first_name} {middle_name} {last_name}"
-            profile = calculate_numerology_profile(full_name, birth_date)
+            soul, expression, personality = (
+                sum(t) for t in zip(first_totals[first_name], middle_totals[middle_name], last_totals))
+            profile = {
+                'life_path': life_path,
+                'soul_urge': reduce_to_single_digit(soul),
+                'expression': reduce_to_single_digit(expression),
+                'personality': reduce_to_single_digit(personality)
+            }
             
             # Check if any of the target components have master numbers
             master_numbers_found = []
-            for component in target_components:
-                if component in profile and profile[component] in target_numbers:
+            for component in name_components:
+                if profile[component] in target_numbers:
                     master_numbers_found.append((component, profile[component]))
             
             if master_numbers_found:
@@ -299,12 +363,12 @@ def find_master_number_names(birth_date, gender, last_name, target_numbers=[11, 
                     'profile': profile,
                     'master_numbers': master_numbers_found
                 })
-        
-        if len(results) >= max_results:
-            break
     
-    print(f"\nSearch complete! Checked {combinations_checked} combinations.")
-    return results
+    # Most master numbers first; sort is stable, so ties stay alphabetical
+    results.sort(key=lambda result: len(result['master_numbers']), reverse=True)
+    
+    print(f"Search complete! Checked {combinations_checked} combinations, {len(results)} matched.")
+    return results[:max_results]
 
 def display_results(results):
     """Display the found name combinations in a formatted way"""
@@ -313,7 +377,7 @@ def display_results(results):
         return
     
     print(f"\n{'='*60}")
-    print(f" FOUND {len(results)} NAME COMBINATIONS WITH MASTER NUMBERS")
+    print(f" TOP {len(results)} NAME COMBINATIONS WITH MASTER NUMBERS")
     print(f"{'='*60}")
     
     for i, result in enumerate(results, 1):
@@ -355,6 +419,9 @@ def main():
         if not birth_date or not last_name:
             print("Error: Birth date and last name are required.")
             return
+        
+        # Validate the date now rather than after all the filter prompts
+        calculate_life_path(birth_date)
         
         # Use None if first name is empty
         fixed_first_name = first_name if first_name else None

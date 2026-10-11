@@ -7,7 +7,7 @@
 * Input your birth date, gender, last name, and optionally a fixed first name when prompted
 * Configure optional filters for which master numbers and profile components to target
 * The script searches all valid name combinations and calculates each numerological profile
-* You'll receive a ranked list of matching names with their full numerological breakdown
+* You'll receive a ranked list of matching names (most master numbers first) with their full numerological breakdown
 
 ```
 Example:
@@ -26,76 +26,78 @@ Searching for names with master numbers [11, 22, 33]
 Target components: ['life_path', 'soul_urge', 'expression', 'personality']
 Maximum results: 10
 ------------------------------------------------------------
-Searching for names with master numbers [11, 22, 33] in components: ['life_path', 'soul_urge', 'expression', 'personality']
-Checking 229 first names × 164 middle names = 37556 combinations...
+Life Path 8 comes from the birth date, so no name can make it a master number.
+Ranking names on: ['soul_urge', 'expression', 'personality']
+
+Searching for names with master numbers [11, 22, 33] in components: ['soul_urge', 'expression', 'personality']
+Checking 229 first names × 164 middle names...
 This may take a moment...
 
-
-Search complete! Checked 40 combinations.
+Search complete! Checked 37393 combinations, 11839 matched.
 
 ============================================================
- FOUND 10 NAME COMBINATIONS WITH MASTER NUMBERS
+ TOP 10 NAME COMBINATIONS WITH MASTER NUMBERS
 ============================================================
 
-1. Aaron Aaron Floyd
+1. Abel Adam Floyd
    Life Path: 8
-   Soul Urge: 22 ✅
-   Expression: 7
-   Personality: 3
-
-2. Aaron Benjamin Floyd
-   Life Path: 8
-   Soul Urge: 11 ✅
-   Expression: 8
-   Personality: 6
-
-3. Aaron Brian Floyd
-   Life Path: 8
-   Soul Urge: 6
+   Soul Urge: 5
    Expression: 11 ✅
-   Personality: 5
+   Personality: 33 ✅
 
-4. Aaron Bruce Floyd
+2. Abel Alan Floyd
    Life Path: 8
-   Soul Urge: 22 ✅
-   Expression: 7
-   Personality: 3
-
-5. Aaron Bryan Floyd
-   Life Path: 8
-   Soul Urge: 22 ✅
-   Expression: 9
-   Personality: 5
-
-6. Aaron Christian Floyd
-   Life Path: 8
-   Soul Urge: 33 ✅
-   Expression: 5
-   Personality: 8
-
-7. Aaron Cole Floyd
-   Life Path: 8
-   Soul Urge: 7
+   Soul Urge: 5
    Expression: 11 ✅
-   Personality: 4
+   Personality: 33 ✅
 
-8. Aaron Connor Floyd
+3. Abel Edward Floyd
    Life Path: 8
-   Soul Urge: 8
-   Expression: 1
+   Soul Urge: 9
+   Expression: 11 ✅
    Personality: 11 ✅
 
-9. Aaron Daniel Floyd
+4. Abel Kenneth Floyd
+   Life Path: 8
+   Soul Urge: 22 ✅
+   Expression: 6
+   Personality: 11 ✅
+
+5. Abel Peter Floyd
+   Life Path: 8
+   Soul Urge: 22 ✅
+   Expression: 11 ✅
+   Personality: 7
+
+6. Abel Reed Floyd
+   Life Path: 8
+   Soul Urge: 22 ✅
+   Expression: 6
+   Personality: 11 ✅
+
+7. Abraham Christopher Floyd
    Life Path: 8
    Soul Urge: 11 ✅
-   Expression: 3
-   Personality: 1
+   Expression: 11 ✅
+   Personality: 9
 
-10. Aaron Dylan Floyd
-    Life Path: 8
-    Soul Urge: 22 ✅
-    Expression: 5
-    Personality: 1
+8. Abraham Julian Floyd
+   Life Path: 8
+   Soul Urge: 22 ✅
+   Expression: 11 ✅
+   Personality: 7
+
+9. Abraham Louis Floyd
+   Life Path: 8
+   Soul Urge: 9
+   Expression: 11 ✅
+   Personality: 11 ✅
+
+10. Abraham Nathan Floyd
+   Life Path: 8
+   Soul Urge: 11 ✅
+   Expression: 11 ✅
+   Personality: 9
 ```
 
 ## Understanding the Generator
@@ -104,7 +106,10 @@ Search complete! Checked 40 combinations.
 Master numbers - 11, 22, and 33 - are special values in Pythagorean Numerology that are not reduced further to a single digit. They carry amplified energy and are considered rare and significant in a numerological profile.
 
 ### How the Search Works
-The script holds your last name and birth date constant (since they are fixed), then systematically pairs every first name in its database with every middle name appropriate to your gender. For each three-part name combination, it calculates the full numerological profile and checks whether any targeted component resolves to a master number. Results are returned in the order they are discovered.
+The script holds your last name and birth date constant (since they are fixed), then systematically pairs every first name in its database with every middle name appropriate to your gender, skipping repeats such as "Aaron Aaron". For each three-part name combination, it calculates the numerological profile and checks whether any targeted component resolves to a master number. Every combination is checked; the names with the most master numbers are listed first, alphabetically within a tie.
+
+### Life Path Is Fixed by the Birth Date
+Your Life Path comes from your birth date alone, so no name can change it. The script reports it once at the start: if it is a master number, every name shares it, so names are ranked on Soul Urge, Expression and Personality only. If Life Path is the only component you target, there is nothing for a name to change and the search is skipped.
 
 ### Fixed First Name Option
 If you provide a first name, the search is restricted to that name only, pairing it with all eligible middle names. This dramatically narrows the search space and is ideal when you already know the first name but want to find a middle name that introduces master number energy.
@@ -119,7 +124,7 @@ By default the script searches for all three master numbers (11, 22, 33). You ca
 You can limit the search to one or more specific profile components: `life_path`, `soul_urge`, `expression`, and/or `personality`. By default all four components are checked. For example, specifying `expression` will only flag a name if its Expression number is a master number, ignoring the other three components.
 
 ### Maximum Results
-Controls how many matching name combinations are returned before the search stops. The default is 10. Increasing this number will extend search time.
+Controls how many of the top-ranked name combinations are shown. The default is 10.
 
 ## How Numbers Are Calculated
 
@@ -130,15 +135,19 @@ Calculated from your birth date. The month, day, and year are each reduced separ
 Calculated from all letters in the full name using the Pythagorean chart. Each letter is assigned a value of 1–9, all values are summed, and the total is reduced - stopping if a master number is reached.
 
 ### Soul Urge Number (Heart's Desire)
-Calculated from the vowels in the full name. A, E, I, O, and U each carry specific values (1, 5, 9, 6, and 3 respectively). Y is treated as a vowel when it follows a consonant and is not at the start of a syllable. All vowel values are summed and reduced.
+Calculated from the vowels in the full name. A, E, I, O, and U each carry specific values (1, 5, 9, 6, and 3 respectively), and Y is 7 when it acts as a vowel. All vowel values are summed and reduced.
+
+Y is judged separately in each part of the name. It is a consonant when it starts a name before a vowel (*Young*, *Yolanda*) or follows a vowel (*Floyd*, *Raymond*); otherwise it is a vowel (*Mary*, *Lynn*, *Bryan*, *Yvonne*). Accented letters count as their plain letter (*José* = *Jose*).
 
 ### Personality Number
-Calculated from the consonants in the full name. Y is treated as a consonant when it appears at the start of a name or immediately follows a vowel. All consonant values are summed and reduced.
+Calculated from the consonants in the full name, including Y whenever it is not acting as a vowel. All consonant values are summed and reduced.
 
 ### Master Number Preservation
 At every reduction step, the script checks whether the current total is 11, 22, or 33. If it is, reduction stops and the master number is preserved rather than collapsed to a single digit.
 
 ## Pythagorean Letter Values
+
+The Pythagorean method assigns the Latin alphabet the values 1 through 9 (Numerology, Wikipedia) — equivalent to numbering the alphabet A = 1 … Z = 26 and reducing each number to one digit.
 
 | Value | Letters         |
 |-------|-----------------|
@@ -153,6 +162,8 @@ At every reduction step, the script checks whether the current total is 11, 22, 
 | 9     | I, R            |
 
 ## Master Number Meanings
+
+Master numbers are a modern numerology convention; none of the source documents mention them, and Britannica notes that in older number symbolism 11 "generally has negative connotations".
 
 ### 11 - The Intuitive
 The Master Intuitive carries heightened spiritual sensitivity and inspirational potential. Names that produce an 11 in any component suggest a person wired for vision, psychic awareness, and the ability to uplift others through insight and creativity.

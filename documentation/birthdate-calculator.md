@@ -36,6 +36,7 @@ Intuitive Plane: 3
 
 Positive Traits:
 • Intuition (High Confidence)
+• Spirituality (High Confidence)
 • Nurturing (High Confidence)
 • Responsibility (High Confidence)
 • Compassion (High Confidence)
@@ -43,8 +44,7 @@ Positive Traits:
 • Family-Oriented (High Confidence)
 • Inspiration (High Confidence)
 • Analytical (High Confidence)
-• Spiritual (High Confidence)
-• Spirituality (High Confidence)
+• Idealism (High Confidence)
 
 Negative Traits:
 • Pessimism (High Confidence)
@@ -91,7 +91,7 @@ Negative Traits:
 ==================================================
 
 Positive Identity:
-Inspiration Focused Individual
+Spiritual Intuitive with Inspiration Drive
 
 Negative Identity:
 Pessimistic Thinker with Interference Tendencies
@@ -107,6 +107,8 @@ Your Expression Number reveals your natural abilities and life goals. Calculated
 
 ### Soul Urge Number (Heart's Desire)
 Your Soul Urge Number shows your inner motivations and deepest desires. Calculated from the vowels in your name, it reveals what truly drives you from within.
+
+**When Y counts as a vowel:** Y is judged separately in each part of the name. It is a consonant when it starts a name before a vowel (*Young*, *Yolanda*) or follows a vowel (*Floyd*, *Raymond*); otherwise it is a vowel (*Mary*, *Lynn*, *Bryan*, *Yvonne*). Accented letters count as their plain letter (*José* = *Jose*).
 
 ### Personality Number
 Your Personality Number reveals how others see you and the impression you make. Calculated from the consonants in your name, it shows your outer personality and style.
@@ -133,6 +135,24 @@ Your Emotional Plane Number reveals how you process feelings and emotions. It sh
 
 #### Intuitive Plane Number
 Your Intuitive Plane Number describes your capacity for direct spiritual contact and higher perception. Intuitive insight comes in flashes, bypassing rational thought. This plane represents your ability to access higher realms of knowledge and understanding.
+
+### Letter Values
+Letters use the Pythagorean chart, which assigns the Latin alphabet the values 1 through 9 (Numerology, Wikipedia). It is the same as numbering the alphabet A = 1 … Z = 26, the arithmomancy cipher Britannica describes, and reducing each number to one digit: J = 10 → 1, S = 19 → 1, Z = 26 → 8.
+
+| Value | Letters |
+|-------|---------|
+| 1 | A, J, S |
+| 2 | B, K, T |
+| 3 | C, L, U |
+| 4 | D, M, V |
+| 5 | E, N, W |
+| 6 | F, O, X |
+| 7 | G, P, Y |
+| 8 | H, Q, Z |
+| 9 | I, R |
+
+### Master Numbers
+11, 22 and 33 are kept unreduced at every step. Master numbers are a modern numerology convention; none of the source documents mention them, and Britannica notes that in older number symbolism 11 "generally has negative connotations".
 
 ## Number Meanings
 
